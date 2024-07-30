@@ -1,0 +1,53 @@
+﻿@if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+{
+    <div class="col-md-12">
+        <div class="alert alert-back alert-danger">
+            <button type="button" class="close alert-close"><span aria-hidden="true">&times;</span></button>
+            @Html.ValidationSummary(false, string.Empty)
+        </div>
+    </div>
+}
+
+@if (TempData["Return"] != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            @switch ((TempData["Return"] as FalzoniNetFCSharp.Presentation.Administrator.Models.Common.ReturnModel).Type)
+            {
+                case "Error":
+                    <div class="alert alert-back alert-danger">
+                        <button type="button" class="close alert-close"><span aria-hidden="true">&times;</span></button>
+                        @((TempData["Return"] as FalzoniNetFCSharp.Presentation.Administrator.Models.Common.ReturnModel).Message)
+                    </div>
+                    break;
+
+                case "Warning":
+                    <div class="alert alert-back alert-warning">
+                        <button type="button" class="close alert-close"><span aria-hidden="true">&times;</span></button>
+                        @((TempData["Return"] as FalzoniNetFCSharp.Presentation.Administrator.Models.Common.ReturnModel).Message)
+                    </div>
+                    break;
+
+                case "Success":
+                    <div class="alert alert-back alert-success">
+                        <button type="button" class="close alert-close"><span aria-hidden="true">&times;</span></button>
+                        @((TempData["Return"] as FalzoniNetFCSharp.Presentation.Administrator.Models.Common.ReturnModel).Message)
+                    </div>
+                    break;
+
+                default:
+                    <div class="alert alert-back alert-info">
+                        <button type="button" class="close alert-close"><span aria-hidden="true">&times;</span></button>
+                        @((TempData["Return"] as FalzoniNetFCSharp.Presentation.Administrator.Models.Common.ReturnModel).Message)
+                    </div>
+                    break;
+            }
+        </div>
+    </div>
+}
+
+<!--Jquery Validations-->
+<div class="alert alert-jquery d-none">
+    <button type="button" class="close alert-close"><span aria-hidden="true">&times;</span></button>
+    <p class="text-alert-jquery"></p>
+</div>

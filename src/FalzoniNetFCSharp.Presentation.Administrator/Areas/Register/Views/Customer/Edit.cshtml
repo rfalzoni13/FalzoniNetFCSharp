@@ -1,0 +1,28 @@
+﻿@model FalzoniNetFCSharp.Presentation.Administrator.Models.Register.CustomerModel
+
+@{
+    ViewBag.Title = "Editar cliente";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    @Html.Partial("_Styles")
+}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    @Html.Partial("_Form", Model)
+</div>
+
+@section modals
+{
+    @Html.Partial("_ModalSuccess")
+    @Html.Partial("_ModalWarning")
+    @Html.Partial("_ModalError")
+}
+
+@section scripts
+{
+    @Html.Partial("_Scripts")
+}
+
+

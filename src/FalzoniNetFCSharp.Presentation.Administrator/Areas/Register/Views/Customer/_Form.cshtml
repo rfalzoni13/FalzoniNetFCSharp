@@ -1,0 +1,229 @@
+﻿@model FalzoniNetFCSharp.Presentation.Administrator.Models.Register.CustomerModel
+@{
+    var action = ViewContext.RouteData.GetRequiredString("action");
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        @(action == "Create" ? "Novo Cliente" : "Editar Cliente")
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("Index", "Home", new { Area = string.Empty })"><i class="glyphicon glyphicon-home"></i> Home</a></li>
+        <li><a href="@Url.Action("Index", "Cliente", new { area = "Register" } )"><i class="glyphicon glyphicon-edit"></i> Cadastro</a></li>
+        <li><a href="@Url.Action("Index", "Cliente", new { area = "Register" } )"><i class="fa fa-user"></i> Cliente</a></li>
+        <li class="active"><i class="fa fa-plus-square"></i> @(action == "Create" ? "Novo" : "Editar")</li>
+    </ol>
+</section><!--section -->
+
+<section class="content container-fluid">
+    <div class="col-12">
+        @using (Html.BeginForm(action, "Cliente", new { Area = "Register" }, FormMethod.Post, new { @class = "form-customer", enctype = "multipart/form-data" }))
+        {
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Dados cadastrais</h3>
+                </div>
+                <div class="box-body">
+                    @Html.Partial("_ReturnMessages")
+                    @Html.HiddenFor(x => x.Id)
+                    <div class="row mb-15">
+                        <div class="col-md-5">
+                            @Html.LabelFor(x => x.Name)
+                            @Html.TextBoxFor(x => x.Name, new { @class = "form-control", @autofocus = "autofocus" })
+                        </div>
+                        <div class="col-md-4">
+                            @Html.LabelFor(x => x.Email)
+                            @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(x => x.DateBirth)
+                            <div class="input-group date" data-provide="datepicker">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                @Html.TextBoxFor(x => x.DateBirth, new { @Value = Model.DateBirth > DateTime.MinValue ? Model.DateBirth.ToString("dd/MM/yyyy") : string.Empty, @class = "form-control pull-right" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @if (Model.Genders != null)
+                        {
+                            <div class="col-md-3">
+                                @Html.Label("Sexo")
+                                @Html.DropDownListFor(x => x.Gender, Model.Genders, "Selecione...", new { @class = "form-control" })
+                            </div>
+                        }
+                        <div class="col-md-3">
+                            @Html.LabelFor(x => x.PhoneNumber)
+                            @Html.TextBoxFor(x => x.PhoneNumber, new { @class = "form-control phone" })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(x => x.CellPhoneNumber)
+                            @Html.TextBoxFor(x => x.CellPhoneNumber, new { @class = "form-control cellphone" })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(x => x.Document)
+                            @Html.TextBoxFor(x => x.Document, new { @class = "form-control cpf" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Cadastro de endereço</h3>
+                </div>
+                <div class="box-body">
+                    <div class="box-form-address d-none">
+                        <input type="hidden" id="IndexTable" value="" />
+                        <div class="row mb-15">
+                            <div class="col-md-3">
+                                <label for="Postal">CEP</label>
+                                <input type="text" class="form-control postalcode" id="Postal" />
+                            </div>
+                            <div class="col-md-7">
+                                <label for="Street">Logradouro</label>
+                                <input type="text" class="form-control" id="Street" />
+                            </div>
+                            <div class="col-md-2">
+                                <label for="Num">Número</label>
+                                <input type="text" class="form-control" id="Num" />
+                            </div>
+                        </div>
+                        <div class="row mb-15">
+                            <div class="col-md-4">
+                                <label for="Comp">Complemento</label>
+                                <input type="text" class="form-control" id="Comp" />
+                            </div>
+                            <div class="col-md-3">
+                                <label for="Region">Bairro</label>
+                                <input type="text" class="form-control" id="Region" />
+                            </div>
+                            <div class="col-md-3">
+                                <label for="District">Cidade</label>
+                                <input type="text" class="form-control" id="District" />
+                            </div>
+                            <div class="col-md-2">
+                                <label for="UF">Estado</label>
+                                <input type="text" class="form-control" id="UF" />
+                            </div>
+                        </div>
+                        <div class="row mb-15">
+                            <div class="col-md-2">
+                                <button id="AddAddress" class="btn btn-info btn-block" type="button">Adicionar</button>
+                            </div>
+                            <div class="col-md-2">
+                                <button id="HideFormAddress" class="btn btn-default btn-block" type="button">Cancelar</button>
+                            </div>
+                        </div>
+                        <hr />
+                    </div>
+                    <div class="row mb-15">
+                        <div class="col-md-12">
+                            <div class="float-right">
+                                <button id="ShowFormAddress" class="btn btn-primary btn-sm" type="button"><i class="fa fa-plus"></i></button>
+                            </div>
+
+                            <h4 class="title-table-address @(Model.Addresses?.Count() <= 0 ? "d-none" : string.Empty)">Endereços</h4>
+
+                            <p class="text-center no-address @(Model.Addresses?.Count() > 0 ? "d-none" : string.Empty)">Nenhum endereço cadastrado</p>
+
+                            <div class="table-responsive @(Model.Addresses?.Count() <= 0 ? "d-none" : string.Empty)">
+                                <table id="CustomerAddressTable" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                @Html.DisplayName("CEP")
+                                            </th>
+                                            <th>
+                                                @Html.DisplayName("Logradouro")
+                                            </th>
+                                            <th>
+                                                @Html.DisplayName("Número")
+                                            </th>
+                                            <th>
+                                                @Html.DisplayName("Complemento")
+                                            </th>
+                                            <th>
+                                                @Html.DisplayName("Bairro")
+                                            </th>
+                                            <th>
+                                                @Html.DisplayName("Cidade")
+                                            </th>
+                                            <th>
+                                                @Html.DisplayName("Estado")
+                                            </th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (int i = 0; i < Model.Addresses?.Count(); i++)
+                                        {
+                                            if (!Model.Addresses[i].Removed)
+                                            {
+                                                <tr>
+                                                    @Html.HiddenFor(x => x.Addresses[i].Id)
+                                                    @Html.HiddenFor(x => x.Addresses[i].Removed)
+                                                    <td>
+                                                        @Html.HiddenFor(x => x.Addresses[i].PostalCode)
+                                                        @Html.DisplayTextFor(x => x.Addresses[i].PostalCode)
+                                                    </td>
+                                                    <td>
+                                                        @Html.HiddenFor(x => x.Addresses[i].AddressName)
+                                                        @Html.DisplayTextFor(x => x.Addresses[i].AddressName)
+                                                    </td>
+                                                    <td>
+                                                        @Html.HiddenFor(x => x.Addresses[i].Number)
+                                                        @Html.DisplayTextFor(x => x.Addresses[i].Number)
+                                                    </td>
+                                                    <td>
+                                                        @Html.HiddenFor(x => x.Addresses[i].Complement)
+                                                        @Html.DisplayTextFor(x => x.Addresses[i].Complement)
+                                                    </td>
+                                                    <td>
+                                                        @Html.HiddenFor(x => x.Addresses[i].Neighborhood)
+                                                        @Html.DisplayTextFor(x => x.Addresses[i].Neighborhood)
+                                                    </td>
+                                                    <td>
+                                                        @Html.HiddenFor(x => x.Addresses[i].City)
+                                                        @Html.DisplayTextFor(x => x.Addresses[i].City)
+                                                    </td>
+                                                    <td>
+                                                        @Html.HiddenFor(x => x.Addresses[i].State)
+                                                        @Html.DisplayTextFor(x => x.Addresses[i].State)
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-info edit-address"
+                                                                data-toggle="tooltip" data-placement="top" title="Editar">
+                                                            <i class="fa fa-pencil-square-o"></i>
+                                                        </button>
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-danger delete-address" data-toggle="tooltip" data-placement="top" title="Deletar">
+                                                            <i class="fa fa-trash-o"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <button id="SendForm" class="btn btn-success btn-block" type="submit">@(action == "Create" ? "Cadastrar" : "Salvar")</button>
+                        </div>
+                        <div class="col-md-2">
+                            @Html.ActionLink("Voltar", "Index", null, new { @class = "btn btn-default btn-block" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div> <!-- /container -->
+</section>
