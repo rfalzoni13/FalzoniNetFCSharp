@@ -65,7 +65,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
                         throw new ApplicationException("Caminho ou serviço não encontrado!");
 
                     default:
-                        var errorResponse = response.Content.ReadAsAsync<ResponseErrorLogin>().Result;
+                        var errorResponse = await response.Content.ReadAsAsync<ResponseErrorLogin>();
 
                         throw new ApplicationException(!string.IsNullOrEmpty(errorResponse.error_description) ? errorResponse.error_description : errorResponse.error);
                 }
@@ -122,7 +122,9 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
                         throw new ApplicationException("Caminho ou serviço não encontrado!");
 
                     default:
-                        throw new ApplicationException("Login e/ou Senha incorretos!");
+                        var errorResponse = await response.Content.ReadAsAsync<ResponseErrorLogin>();
+
+                        throw new ApplicationException(!string.IsNullOrEmpty(errorResponse.error_description) ? errorResponse.error_description : errorResponse.error);
                 }
             }
         }
