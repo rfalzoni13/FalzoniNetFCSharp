@@ -2,7 +2,6 @@
 using FalzoniNetFCSharp.Presentation.Administrator.Clients.Interfaces.Configuration;
 using FalzoniNetFCSharp.Presentation.Administrator.Models.Common;
 using FalzoniNetFCSharp.Presentation.Administrator.Models.Configuration;
-using FalzoniNetFCSharp.Presentation.Administrator.Models.Tables.Configuration;
 using FalzoniNetFCSharp.Utils.Helpers;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ using System.Net.Http;
 
 namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Configuration
 {
-    public class RoleClient : BaseClient<RoleModel, RoleTableModel>, IRoleClient
+    public class RoleClient : BaseClient<RoleModel>, IRoleClient
     {
         public RoleClient() :base() { }
 

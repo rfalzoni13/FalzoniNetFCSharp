@@ -3,11 +3,10 @@ using FalzoniNetFCSharp.Presentation.Api.Attributes;
 using FalzoniNetFCSharp.Presentation.Api.Models.Register;
 using FalzoniNetFCSharp.Presentation.Api.Utils;
 using NLog;
-using System.Net.Http;
-using System.Net;
 using System;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
-using System.Linq;
 
 namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Register
 {
@@ -32,7 +31,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Register
         /// Listar todos os clientes
         /// </summary>
         /// <response code="401">Unauthorized</response>
-        /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server Error</response>
         /// <remarks>Listagem de todos os clientes</remarks>
         /// <returns></returns>
@@ -47,27 +45,10 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Register
                 _logger.Info(action + " - Iniciado");
                 var retorno = _customerServiceApplication.GetAll();
 
-                if (retorno != null && retorno.Count() > 0)
-                {
-                    _logger.Info(action + " - Sucesso!");
+                _logger.Info(action + " - Sucesso!");
 
-                    _logger.Info(action + " - Finalizado");
-                    return Request.CreateResponse(HttpStatusCode.OK, retorno);
-                }
-                else
-                {
-                    throw new HttpResponseException(HttpStatusCode.NotFound);
-                }
-            }
-
-            catch (HttpResponseException ex)
-            {
-                if (ex.Response.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return ResponseManager.ReturnExceptionNotFound(ex, Request, _logger, action, "Nenhum registro encontrado!");
-                }
-
-                return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
+                _logger.Info(action + " - Finalizado");
+                return Request.CreateResponse(HttpStatusCode.OK, retorno);
             }
 
             catch (Exception ex)
@@ -81,7 +62,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Register
         /// </summary>
         /// <response code="400">Bad Request</response>
         /// <response code="401">Unauthorized</response>
-        /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server Error</response>
         /// <remarks>Retorna o cliente através do Id do mesmo</remarks>
         /// <param name="Id">Id do cliente</param>
@@ -95,35 +75,20 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Register
             try
             {
                 _logger.Info(action + " - Iniciado");
-                if (!Guid.Equals(Id, Guid.Empty))
-                {
-                    var customer = _customerServiceApplication.Get(Id);
+                if (Guid.Equals(Id, Guid.Empty))
+                    throw new ApplicationException("Parâmetro incorreto!");
 
-                    if (customer != null)
-                    {
-                        _logger.Info(action + " - Sucesso!");
+                var customer = _customerServiceApplication.Get(Id);
 
-                        _logger.Info(action + " - Finalizado");
-                        return Request.CreateResponse(HttpStatusCode.OK, customer);
-                    }
-                    else
-                    {
-                        throw new HttpResponseException(HttpStatusCode.NotFound);
-                    }
-                }
-                else
-                {
-                    return ResponseManager.ReturnBadRequest(Request, _logger, action, "Parâmetro incorreto!");
-                }
+
+                _logger.Info(action + " - Sucesso!");
+
+                _logger.Info(action + " - Finalizado");
+                return Request.CreateResponse(HttpStatusCode.OK, customer);
             }
-            catch (HttpResponseException ex)
+            catch (ApplicationException ex)
             {
-                if (ex.Response.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return ResponseManager.ReturnExceptionNotFound(ex, Request, _logger, action, "Nenhum registro encontrado!");
-                }
-
-                return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
+                return ResponseManager.ReturnBadRequest(ex, Request, _logger, action);
             }
 
             catch (Exception ex)
@@ -139,7 +104,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Register
         /// </summary>
         /// <response code="400">Bad Request</response>
         /// <response code="401">Unauthorized</response>
-        /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server Error</response>
         /// <remarks>Insere um novo cliente passando um objeto no body da requisição no método POST</remarks>
         /// <param name="model">Objeto de registro cliente</param>
@@ -168,18 +132,13 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Register
                 }
                 else
                 {
-                    return ResponseManager.ReturnBadRequest(Request, _logger, action, "Por favor, preencha os campos corretamente!");
+                    throw new ApplicationException("Por favor, preencha os campos corretamente!");
                 }
             }
 
-            catch (HttpResponseException ex)
+            catch (ApplicationException ex)
             {
-                if (ex.Response.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return ResponseManager.ReturnExceptionNotFound(ex, Request, _logger, action, "Nenhum registro encontrado!");
-                }
-
-                return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
+                return ResponseManager.ReturnBadRequest(ex, Request, _logger, action);
             }
 
             catch (Exception ex)
@@ -193,7 +152,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Register
         ///// </summary>
         ///// <response code="400">Bad Request</response>
         ///// <response code="401">Unauthorized</response>
-        ///// <response code="404">Not Found</response>
         ///// <response code="500">Internal Server Error</response>
         ///// <remarks>Insere um novo cliente passando um objeto no body da requisição no método POST de forma assíncrona</remarks>
         ///// <param name="model">Objeto de registro cliente</param>
@@ -210,7 +168,7 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Register
         //        {
         //            _logger.Info(action + " - Iniciado");
 
-        //            var customerDTO = model.ConverterParaDTO();
+        //            var customerDTO = model.ConvertToDTO();
 
         //            await _customerServiceApplication.AddAsync(customerDTO);
 
@@ -218,21 +176,17 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Register
 
         //            _logger.Info(action + " - Finalizado");
 
-        //            return Request.CreateResponse(HttpStatusCode.Created, "Customer incluído com sucesso!");
+        //            return Request.CreateResponse(HttpStatusCode.Created, "Cliente incluído com sucesso!");
         //        }
         //        else
         //        {
-        //            return ResponseManager.ReturnBadRequest(Request, _logger, action, "Por favor, preencha os campos corretamente!");
+        //            throw new ApplicationException("Por favor, preencha os campos corretamente!");
         //        }
         //    }
-        //    catch (HttpResponseException ex)
-        //    {
-        //        if (ex.Response.StatusCode == HttpStatusCode.NotFound)
-        //        {
-        //            return ResponseManager.ReturnExceptionNotFound(ex, Request, _logger, action, "Nenhum registro encontrado!");
-        //        }
 
-        //        return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
+        //    catch (ApplicationException ex)
+        //    {
+        //        return ResponseManager.ReturnBadRequest(ex, Request, _logger, action);
         //    }
 
         //    catch (Exception ex)
@@ -248,7 +202,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Register
         /// </summary>
         /// <response code="400">Bad Request</response>
         /// <response code="401">Unauthorized</response>
-        /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server Error</response>
         /// <remarks>Atualiza o cliente passando o objeto no body da requisição pelo método PUT</remarks>
         /// <param name="model">Objeto de registro do cliente</param>
@@ -277,18 +230,13 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Register
                 }
                 else
                 {
-                    return ResponseManager.ReturnBadRequest(Request, _logger, action, "Por favor, preencha os campos corretamente!");
+                    throw new ApplicationException("Por favor, preencha os campos corretamente!");
                 }
             }
 
-            catch (HttpResponseException ex)
+            catch (ApplicationException ex)
             {
-                if (ex.Response.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return ResponseManager.ReturnExceptionNotFound(ex, Request, _logger, action, "Nenhum registro encontrado!");
-                }
-
-                return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
+                return ResponseManager.ReturnBadRequest(ex, Request, _logger, action);
             }
 
             catch (Exception ex)
@@ -302,7 +250,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Register
         ///// </summary>
         ///// <response code="400">Bad Request</response>
         ///// <response code="401">Unauthorized</response>
-        ///// <response code="404">Not Found</response>
         ///// <response code="500">Internal Server Error</response>
         ///// <remarks>Atualiza o cliente passando o objeto no body da requisição pelo método PUT de forma assíncrona</remarks>
         ///// <param name="model">Objeto de registro do cliente</param>
@@ -314,21 +261,33 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Register
         //    string action = this.ActionContext.ActionDescriptor.ActionName;
         //    try
         //    {
-        //        _logger.Info(action + " - Iniciado");
+        //        if (ModelState.IsValid)
+        //        {
+        //            _logger.Info(action + " - Iniciado");
 
-        //        var customerDTO = model.ConverterParaDTO();
+        //            var customerDTO = model.ConvertToDTO();
 
-        //        await _customerServiceApplication.UpdateAsync(customerDTO);
+        //            await _customerServiceApplication.UpdateAsync(customerDTO);
 
-        //        _logger.Info(action + " - Sucesso!");
+        //            _logger.Info(action + " - Sucesso!");
 
-        //        _logger.Info(action + " - Finalizado");
+        //            _logger.Info(action + " - Finalizado");
 
-        //        return Request.CreateResponse(System.Net.HttpStatusCode.OK, "Cliente atualizado com sucesso!");
+        //            return Request.CreateResponse(HttpStatusCode.OK, "Cliente atualizado com sucesso!");
+        //        }
+        //        else
+        //        {
+        //            throw new ApplicationException("Por favor, preencha os campos corretamente!");
+        //        }
         //    }
+
+        //    catch (ApplicationException ex)
+        //    {
+        //        return ResponseManager.ReturnBadRequest(ex, Request, _logger, action);
+        //    }
+
         //    catch (Exception ex)
         //    {
-        //        _logger.Fatal(ex, "Erro fatal!");
         //        return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
         //    }
         //}
@@ -367,8 +326,13 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Register
                 }
                 else
                 {
-                    return ResponseManager.ReturnBadRequest(Request, _logger, action, "Por favor, preencha os campos corretamente!");
+                    throw new ApplicationException("Por favor, preencha os campos corretamente!");
                 }
+            }
+
+            catch (ApplicationException ex)
+            {
+                return ResponseManager.ReturnBadRequest(ex, Request, _logger, action);
             }
 
             catch (Exception ex)
@@ -392,22 +356,34 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Register
         //public async Task<HttpResponseMessage> DeleteAsync([FromBody] CustomerModel model)
         //{
         //    string action = this.ActionContext.ActionDescriptor.ActionName;
+        //    _logger.Info(action + " - Iniciado");
         //    try
         //    {
-        //        _logger.Info(action + " - Iniciado");
+        //        if (ModelState.IsValid)
+        //        {
+        //            var customerDTO = model.ConvertToDTO();
 
-        //        var customerDTO = model.ConvertToDTO();
+        //            await _customerServiceApplication.DeleteAsync(customerDTO);
 
-        //        await _customerServiceApplication.DeleteAsync(customerDTO);
+        //            _logger.Info(action + " - Sucesso!");
 
-        //        _logger.Info(action + " - Sucesso!");
+        //            _logger.Info(action + " - Finalizado");
 
-        //        _logger.Info(action + " - Finalizado");
-        //        return Request.CreateResponse(System.Net.HttpStatusCode.OK, "Cliente deletado com sucesso!");
+        //            return Request.CreateResponse(HttpStatusCode.OK, "Cliente excluído com sucesso!");
+        //        }
+        //        else
+        //        {
+        //            throw new ApplicationException("Por favor, preencha os campos corretamente!");
+        //        }
         //    }
+
+        //    catch (ApplicationException ex)
+        //    {
+        //        return ResponseManager.ReturnBadRequest(ex, Request, _logger, action);
+        //    }
+
         //    catch (Exception ex)
         //    {
-        //        _logger.Fatal(ex, "Erro fatal!");
         //        return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
         //    }
         //}

@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System;
 using FalzoniNetFCSharp.Presentation.Administrator.Models.Common;
+using System.Net;
 
 namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
 {
@@ -22,11 +23,15 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
                 {
                     return await response.Content.ReadAsAsync<ICollection<string>>();
                 }
-                else
+                switch (response.StatusCode)
                 {
-                    StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
+                    case HttpStatusCode.NotFound:
+                        throw new ApplicationException("Caminho ou serviço não encontrado!");
 
-                    throw new Exception(statusCode.Message);
+                    default:
+                        StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
+
+                        throw new ApplicationException(statusCode.Message);
                 }
             }
         }
@@ -40,9 +45,16 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
                 HttpResponseMessage response = await client.PostAsJsonAsync(url, model);
                 if (!response.IsSuccessStatusCode)
                 {
-                    StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
+                    switch (response.StatusCode)
+                    {
+                        case HttpStatusCode.NotFound:
+                            throw new ApplicationException("Caminho ou serviço não encontrado!");
 
-                    throw new Exception(statusCode.Message);
+                        default:
+                            StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
+
+                            throw new ApplicationException(statusCode.Message);
+                    }
                 }
             }
         }
@@ -58,11 +70,15 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
                 {
                     return await response.Content.ReadAsAsync<ReturnVerifyCodeModel>();
                 }
-                else
+                switch (response.StatusCode)
                 {
-                    StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
+                    case HttpStatusCode.NotFound:
+                        throw new ApplicationException("Caminho ou serviço não encontrado!");
 
-                    throw new Exception(statusCode.Message);
+                    default:
+                        StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
+
+                        throw new ApplicationException(statusCode.Message);
                 }
             }
         }
@@ -80,11 +96,15 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
                 {
                     return await response.Content.ReadAsStringAsync();
                 }
-                else
+                switch (response.StatusCode)
                 {
-                    StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
+                    case HttpStatusCode.NotFound:
+                        throw new ApplicationException("Caminho ou serviço não encontrado!");
 
-                    throw new Exception(statusCode.Message);
+                    default:
+                        StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
+
+                        throw new ApplicationException(statusCode.Message);
                 }
             }
         }
@@ -100,11 +120,15 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
                 {
                     return await response.Content.ReadAsStringAsync();
                 }
-                else
+                switch (response.StatusCode)
                 {
-                    StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
+                    case HttpStatusCode.NotFound:
+                        throw new ApplicationException("Caminho ou serviço não encontrado!");
 
-                    throw new Exception(statusCode.Message);
+                    default:
+                        StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
+
+                        throw new ApplicationException(statusCode.Message);
                 }
             }
         }
@@ -120,11 +144,15 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
                 {
                     return await response.Content.ReadAsStringAsync();
                 }
-                else
+                switch (response.StatusCode)
                 {
-                    StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
+                    case HttpStatusCode.NotFound:
+                        throw new ApplicationException("Caminho ou serviço não encontrado!");
 
-                    throw new Exception(statusCode.Message);
+                    default:
+                        StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
+
+                        throw new ApplicationException(statusCode.Message);
                 }
             }
         }
@@ -140,11 +168,15 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
                 {
                     return await response.Content.ReadAsStringAsync();
                 }
-                else
+                switch (response.StatusCode)
                 {
-                    StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
+                    case HttpStatusCode.NotFound:
+                        throw new ApplicationException("Caminho ou serviço não encontrado!");
 
-                    throw new Exception(statusCode.Message);
+                    default:
+                        StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
+
+                        throw new ApplicationException(statusCode.Message);
                 }
             }
         }

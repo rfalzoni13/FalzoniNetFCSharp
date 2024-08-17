@@ -12,20 +12,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Utils
 {
     public static class ResponseManager
     {
-        public static HttpResponseMessage ReturnExceptionNotFound(HttpResponseException ex, HttpRequestMessage request, Logger logger, string action, string message)
-        {
-            logger.Warn(action + " - Error: " + ex);
-
-            StatusCodeModel status = new StatusCodeModel
-            {
-                Status = ex.Response.StatusCode,
-                Message = "Nenhum registro encontrado!"
-            };
-
-            logger.Info(action + " - Finalizado");
-            return request.CreateResponse(HttpStatusCode.NotFound, status);
-        }
-
         public static HttpResponseMessage ReturnExceptionInternalServerError(Exception ex, HttpRequestMessage request, Logger logger, string action)
         {
             logger.Error(action + " - Error: " + ex);
@@ -42,12 +28,26 @@ namespace FalzoniNetFCSharp.Presentation.Api.Utils
 
         public static HttpResponseMessage ReturnBadRequest(HttpRequestMessage request, Logger logger, string action, string message)
         {
-            logger.Warn(action + " - " + message);
+            logger.Error(action + " - Error: " + message);
 
             StatusCodeModel status = new StatusCodeModel
             {
                 Status = HttpStatusCode.BadRequest,
                 Message = message
+            };
+
+            logger.Info(action + " - Finalizado");
+            return request.CreateResponse(HttpStatusCode.BadRequest, status);
+        }
+
+        public static HttpResponseMessage ReturnBadRequest(Exception ex, HttpRequestMessage request, Logger logger, string action)
+        {
+            logger.Error(action + " - Error: " + ex);
+
+            StatusCodeModel status = new StatusCodeModel
+            {
+                Status = HttpStatusCode.BadRequest,
+                Message = ex.Message
             };
 
             logger.Info(action + " - Finalizado");

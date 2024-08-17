@@ -12,11 +12,11 @@ using FalzoniNetFCSharp.Presentation.Administrator.Models.Common;
 
 namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Register
 {
-    public class CustomerClient : BaseClient<CustomerModel, CustomerTableModel>, ICustomerClient
+    public class CustomerClient : BaseClient<CustomerModel>, ICustomerClient
     {
         public CustomerClient() :base() { }
 
-        public override async Task<CustomerTableModel> GetTableAsync(string url)
+        public async Task<CustomerTableModel> GetTableAsync(string url)
         {
             var table = new CustomerTableModel();
 

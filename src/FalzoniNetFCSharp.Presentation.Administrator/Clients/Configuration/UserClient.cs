@@ -1,19 +1,19 @@
 ﻿using FalzoniNetFCSharp.Presentation.Administrator.Clients.Base;
 using FalzoniNetFCSharp.Presentation.Administrator.Clients.Interfaces.Configuration;
-using FalzoniNetFCSharp.Presentation.Administrator.Models.Configuration;
-using FalzoniNetFCSharp.Presentation.Administrator.Models.Tables.Configuration;
-using System.Net.Http;
-using System;
-using System.Threading.Tasks;
 using FalzoniNetFCSharp.Presentation.Administrator.Models.Common;
+using FalzoniNetFCSharp.Presentation.Administrator.Models.Configuration;
+using FalzoniNetFCSharp.Presentation.Administrator.Models.Identity;
+using FalzoniNetFCSharp.Presentation.Administrator.Models.Tables.Configuration;
 using FalzoniNetFCSharp.Utils.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using FalzoniNetFCSharp.Presentation.Administrator.Models.Identity;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Configuration
 {
-    public class UserClient : BaseClient<UserModel, UserTableModel>, IUserClient
+    public class UserClient : BaseClient<UserModel>, IUserClient
     {
         public UserClient() :base() { }
 
@@ -42,7 +42,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Configuration
             }
         }
 
-        public override async Task<UserTableModel> GetTableAsync(string url)
+        public async Task<UserTableModel> GetTableAsync(string url)
         {
             var table = new UserTableModel();
 

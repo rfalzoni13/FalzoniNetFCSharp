@@ -1,18 +1,19 @@
 ﻿using FalzoniNetFCSharp.Presentation.Administrator.Clients.Interfaces.Base;
 using FalzoniNetFCSharp.Presentation.Administrator.Models.Common;
+using FalzoniNetFCSharp.Presentation.Administrator.Utils;
 using FalzoniNetFCSharp.Utils.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Base
 {
-    public class BaseClient<T, TTable> : IBaseClient<T, TTable>
+    public class BaseClient<T> : IBaseClient<T>
         where T : class
-        where TTable : class
     {
         protected string token;
 
@@ -28,16 +29,8 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Base
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
                 HttpResponseMessage response = client.PostAsJsonAsync(url, obj).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    return response.Content.ReadAsStringAsync().Result;
-                }
-                else
-                {
-                    StatusCodeModel statusCode = response.Content.ReadAsAsync<StatusCodeModel>().Result;
-
-                    throw new ApplicationException(statusCode.Message);
-                }
+                string message = ResponseUtils<T>.ReturnMessageString(response);
+                return message;
             }
         }
 
@@ -48,16 +41,8 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Base
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
                 HttpResponseMessage response = await client.PostAsJsonAsync(url, obj);
-                if (response.IsSuccessStatusCode)
-                {
-                    return await response.Content.ReadAsStringAsync();
-                }
-                else
-                {
-                    StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
-
-                    throw new ApplicationException(statusCode.Message);
-                }
+                string message = await ResponseUtils<T>.ReturnMessageStringAsync(response);
+                return message;
             }
         }
 
@@ -68,16 +53,8 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Base
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
                 HttpResponseMessage response = client.PutAsJsonAsync(url, obj).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    return response.Content.ReadAsStringAsync().Result;
-                }
-                else
-                {
-                    StatusCodeModel statusCode = response.Content.ReadAsAsync<StatusCodeModel>().Result;
-
-                    throw new ApplicationException(statusCode.Message);
-                }
+                string message = ResponseUtils<T>.ReturnMessageString(response);
+                return message;
             }
         }
 
@@ -88,16 +65,8 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Base
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
                 HttpResponseMessage response = await client.PutAsJsonAsync(url, obj);
-                if (response.IsSuccessStatusCode)
-                {
-                    return await response.Content.ReadAsStringAsync();
-                }
-                else
-                {
-                    StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
-
-                    throw new ApplicationException(statusCode.Message);
-                }
+                string message = await ResponseUtils<T>.ReturnMessageStringAsync(response);
+                return message;
             }
         }
 
@@ -114,16 +83,8 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Base
                     Content = new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json")
                 };
                 HttpResponseMessage response = client.SendAsync(request).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    return response.Content.ReadAsStringAsync().Result;
-                }
-                else
-                {
-                    StatusCodeModel statusCode = response.Content.ReadAsAsync<StatusCodeModel>().Result;
-
-                    throw new ApplicationException(statusCode.Message);
-                }
+                string message = ResponseUtils<T>.ReturnMessageString(response);
+                return message;
             }
         }
 
@@ -140,16 +101,8 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Base
                     Content = new StringContent(JsonConvert.SerializeObject(obj), Encoding.UTF8, "application/json")
                 };
                 HttpResponseMessage response = await client.SendAsync(request);
-                if (response.IsSuccessStatusCode)
-                {
-                    return await response.Content.ReadAsStringAsync();
-                }
-                else
-                {
-                    StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
-
-                    throw new ApplicationException(statusCode.Message);
-                }
+                string message = await ResponseUtils<T>.ReturnMessageStringAsync(response);
+                return message;
             }
         }
 
@@ -160,16 +113,8 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Base
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
                 HttpResponseMessage response = client.GetAsync($"{url}?id={id}").Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    return response.Content.ReadAsAsync<T>().Result;
-                }
-                else
-                {
-                    StatusCodeModel statusCode = response.Content.ReadAsAsync<StatusCodeModel>().Result;
-
-                    throw new ApplicationException(statusCode.Message);
-                }
+                T obj = ResponseUtils<T>.ReturnObject(response);
+                return obj;
             }
         }
 
@@ -180,16 +125,8 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Base
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
                 HttpResponseMessage response = await client.GetAsync($"{url}?id={id}");
-                if (response.IsSuccessStatusCode)
-                {
-                    return await response.Content.ReadAsAsync<T>();
-                }
-                else
-                {
-                    StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
-
-                    throw new ApplicationException(statusCode.Message);
-                }
+                T obj = await ResponseUtils<T>.ReturnObjectAsync(response);
+                return obj;
             }
 
         }
@@ -201,16 +138,8 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Base
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
                 HttpResponseMessage response = client.GetAsync(url).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    return response.Content.ReadAsAsync<ICollection<T>>().Result;
-                }
-                else
-                {
-                    StatusCodeModel statusCode = response.Content.ReadAsAsync<StatusCodeModel>().Result;
-
-                    throw new ApplicationException(statusCode.Message);
-                }
+                ICollection<T> collection = ResponseUtils<ICollection<T>>.ReturnObject(response);
+                return collection;
             }
         }
 
@@ -221,58 +150,9 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Base
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
                 HttpResponseMessage response = await client.GetAsync(url);
-                if (response.IsSuccessStatusCode)
-                {
-                    return await response.Content.ReadAsAsync<ICollection<T>>();
-                }
-                else
-                {
-                    StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
-
-                    throw new ApplicationException(statusCode.Message);
-                }
+                ICollection<T> collection = await ResponseUtils<ICollection<T>>.ReturnObjectAsync(response);
+                return collection;
             }
         }
-
-        public virtual TTable GetTable(string url)
-        {
-            using (HttpClient client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-
-                HttpResponseMessage response = client.GetAsync(url).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    return response.Content.ReadAsAsync<TTable>().Result;
-                }
-                else
-                {
-                    StatusCodeModel statusCode = response.Content.ReadAsAsync<StatusCodeModel>().Result;
-
-                    throw new ApplicationException(statusCode.Message);
-                }
-            }
-        }
-
-        public virtual async Task<TTable> GetTableAsync(string url)
-        {
-            using (HttpClient client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-
-                HttpResponseMessage response = await client.GetAsync(url);
-                if (response.IsSuccessStatusCode)
-                {
-                    return await response.Content.ReadAsAsync<TTable>();
-                }
-                else
-                {
-                    StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
-
-                    throw new ApplicationException(statusCode.Message);
-                }
-            }
-        }
-
     }
 }

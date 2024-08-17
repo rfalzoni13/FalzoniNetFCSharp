@@ -68,7 +68,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {            // Dependency Injection of Client's Restful interfaces
-            kernel.Bind(typeof(IBaseClient<,>), typeof(BaseClient<,>));
+            kernel.Bind(typeof(IBaseClient<>), typeof(BaseClient<>));
 
 
             kernel.Bind<IRoleClient>().To<RoleClient>().InRequestScope();

@@ -58,7 +58,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
             }
             catch (Exception ex)
             {
-                _logger.Fatal(ex, "Erro fatal!");
                 return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
             }
         }
@@ -105,17 +104,14 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
             }
             catch (UnauthorizedAccessException ex)
             {
-                _logger.Fatal(ex, "Erro Fatal");
-                return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
+                return ResponseManager.ReturnBadRequest(ex, Request, _logger, action);
             }
             catch (ApplicationException ex)
             {
-                _logger.Fatal(ex, "Erro Fatal");
-                return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
+                return ResponseManager.ReturnBadRequest(ex, Request, _logger, action);
             }
             catch (Exception ex)
             {
-                _logger.Fatal(ex, "Erro fatal!");
                 return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
             }
         }
@@ -177,7 +173,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
             }
             catch (Exception ex)
             {
-                _logger.Fatal(ex, "Erro fatal!");
                 return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
             }
         }
@@ -213,7 +208,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
             }
             catch (Exception ex)
             {
-                _logger.Fatal(ex, "Erro fatal!");
                 return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
             }
         }
@@ -247,7 +241,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
             }
             catch (Exception ex)
             {
-                _logger.Fatal(ex, "Erro fatal!");
                 return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
             }
         }
@@ -281,7 +274,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
             }
             catch (Exception ex)
             {
-                _logger.Fatal(ex, "Erro fatal!");
                 return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
             }
         }

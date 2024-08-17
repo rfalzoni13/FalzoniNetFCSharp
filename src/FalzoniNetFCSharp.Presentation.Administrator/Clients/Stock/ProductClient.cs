@@ -12,9 +12,9 @@ using FalzoniNetFCSharp.Presentation.Administrator.Models.Common;
 
 namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Stock
 {
-    public class ProductClient : BaseClient<ProductModel, ProductTableModel>, IProductClient
+    public class ProductClient : BaseClient<ProductModel>, IProductClient
     {
-        public override async Task<ProductTableModel> GetTableAsync(string url)
+        public async Task<ProductTableModel> GetTableAsync(string url)
         {
             var table = new ProductTableModel();
 

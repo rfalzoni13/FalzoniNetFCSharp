@@ -3,7 +3,6 @@ using FalzoniNetFCSharp.Presentation.Api.Attributes;
 using FalzoniNetFCSharp.Presentation.Api.Utils;
 using NLog;
 using System;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -31,7 +30,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Configuration
         /// Listar nomes de Acessos
         /// </summary>
         /// <response code="401">Unauthorized</response>
-        /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server Error</response>
         /// <remarks>Listagem de todos os acessos pelos nomes</remarks>
         /// <returns></returns>
@@ -45,30 +43,13 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Configuration
             {
                 _logger.Info(action + " - Iniciado");
                 var retorno = _roleServiceApplication.GelAllNames();
+                
+                _logger.Info(action + " - Sucesso!");
 
-                if (retorno != null && retorno.Count() > 0)
-                {
-                    _logger.Info(action + " - Sucesso!");
-
-                    _logger.Info(action + " - Finalizado");
-                    return Request.CreateResponse(HttpStatusCode.OK, retorno);
-                }
-                else
-                {
-                    throw new HttpResponseException(HttpStatusCode.NotFound);
-                }
+                _logger.Info(action + " - Finalizado");
+                return Request.CreateResponse(HttpStatusCode.OK, retorno);
+                
             }
-
-            catch (HttpResponseException ex)
-            {
-                if (ex.Response.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return ResponseManager.ReturnExceptionNotFound(ex, Request, _logger, action, "Nenhum registro encontrado!");
-                }
-
-                return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
-            }
-
             catch (Exception ex)
             {
                 return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
@@ -79,7 +60,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Configuration
         /// Listar todos os acessos
         /// </summary>
         /// <response code="401">Unauthorized</response>
-        /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server Error</response>
         /// <remarks>Listagem de todos os acessos</remarks>
         /// <returns></returns>
@@ -94,29 +74,11 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Configuration
                 _logger.Info(action + " - Iniciado");
                 var retorno = _roleServiceApplication.GetAll();
 
-                if (retorno != null && retorno.Count() > 0)
-                {
-                    _logger.Info(action + " - Sucesso!");
+                _logger.Info(action + " - Sucesso!");
 
-                    _logger.Info(action + " - Finalizado");
-                    return Request.CreateResponse(HttpStatusCode.OK, retorno);
-                }
-                else
-                {
-                    throw new HttpResponseException(HttpStatusCode.NotFound);
-                }
+                _logger.Info(action + " - Finalizado");
+                return Request.CreateResponse(HttpStatusCode.OK, retorno);
             }
-
-            catch (HttpResponseException ex)
-            {
-                if (ex.Response.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return ResponseManager.ReturnExceptionNotFound(ex, Request, _logger, action, "Nenhum registro encontrado!");
-                }
-
-                return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
-            }
-
             catch (Exception ex)
             {
                 return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
@@ -128,7 +90,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Configuration
         /// </summary>
         /// <response code="400">Bad Request</response>
         /// <response code="401">Unauthorized</response>
-        /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server Error</response>
         /// <remarks>Retorna o usuário através do Id do mesmo</remarks>
         /// <param name="Id">Id do usuário</param>
@@ -142,35 +103,23 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Configuration
             try
             {
                 _logger.Info(action + " - Iniciado");
-                if (!Guid.Equals(Id, Guid.Empty))
-                {
-                    var role = _roleServiceApplication.Get(Id);
 
-                    if (role != null)
-                    {
-                        _logger.Info(action + " - Sucesso!");
+                if (Guid.Equals(Id, Guid.Empty))
+                    throw new ApplicationException("Parâmetro inválido");
 
-                        _logger.Info(action + " - Finalizado");
-                        return Request.CreateResponse(HttpStatusCode.OK, role);
-                    }
-                    else
-                    {
-                        throw new HttpResponseException(HttpStatusCode.NotFound);
-                    }
-                }
-                else
-                {
-                    return ResponseManager.ReturnBadRequest(Request, _logger, action, "Parâmetro incorreto!");
-                }
+                var role = _roleServiceApplication.Get(Id);                
+
+                _logger.Info(action + " - Sucesso!");
+
+
+                _logger.Info(action + " - Finalizado");
+
+                return Request.CreateResponse(HttpStatusCode.OK, role);
             }
-            catch (HttpResponseException ex)
-            {
-                if (ex.Response.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return ResponseManager.ReturnExceptionNotFound(ex, Request, _logger, action, "Nenhum registro encontrado!");
-                }
 
-                return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
+            catch (ApplicationException ex)
+            {
+                return ResponseManager.ReturnBadRequest(ex, Request, _logger, action);
             }
 
             catch (Exception ex)

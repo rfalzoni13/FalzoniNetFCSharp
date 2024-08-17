@@ -119,12 +119,12 @@ namespace FalzoniNetFCSharp.Utils.Helpers
             CustomerDelete = $"{PathUrl}/{ConfigurationManager.AppSettings["CustomerUrl"]}/Delete";
             #endregion
 
-            #region Customer
-            CustomerGetAll = $"{PathUrl}/{ConfigurationManager.AppSettings["CustomerUrl"]}/GetAll";
-            CustomerGet = $"{PathUrl}/{ConfigurationManager.AppSettings["CustomerUrl"]}/Get";
-            CustomerCreate = $"{PathUrl}/{ConfigurationManager.AppSettings["CustomerUrl"]}/Create";
-            CustomerEdit = $"{PathUrl}/{ConfigurationManager.AppSettings["CustomerUrl"]}/Update";
-            CustomerDelete = $"{PathUrl}/{ConfigurationManager.AppSettings["CustomerUrl"]}/Delete";
+            #region Product
+            ProductGetAll = $"{PathUrl}/{ConfigurationManager.AppSettings["ProductUrl"]}/GetAll";
+            ProductGet = $"{PathUrl}/{ConfigurationManager.AppSettings["ProductUrl"]}/Get";
+            ProductCreate = $"{PathUrl}/{ConfigurationManager.AppSettings["ProductUrl"]}/Create";
+            ProductEdit = $"{PathUrl}/{ConfigurationManager.AppSettings["ProductUrl"]}/Update";
+            ProductDelete = $"{PathUrl}/{ConfigurationManager.AppSettings["ProductUrl"]}/Delete";
             #endregion
 
         }
