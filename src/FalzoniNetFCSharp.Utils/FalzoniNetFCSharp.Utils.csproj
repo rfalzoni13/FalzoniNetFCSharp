@@ -61,7 +61,6 @@
     <Compile Include="Helpers\RandomOAuthStateGeneratorHelper.cs" />
     <Compile Include="Helpers\RequestHelper.cs" />
     <Compile Include="Helpers\StringHelper.cs" />
-    <Compile Include="Helpers\UrlConfigurationHelper.cs" />
     <Compile Include="Keys\EmailKeys.cs" />
     <Compile Include="Keys\TwilioKeys.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

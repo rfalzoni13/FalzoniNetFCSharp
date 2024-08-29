@@ -16,8 +16,6 @@ namespace FalzoniNetFCSharp.Presentation.Administrator
                 AuthenticationType = "ApplicationCookie",
                 LoginPath = new PathString("/Account/Login")
             });
-
-            UrlConfigurationHelper.SetUrlList();
         }
     }
 }

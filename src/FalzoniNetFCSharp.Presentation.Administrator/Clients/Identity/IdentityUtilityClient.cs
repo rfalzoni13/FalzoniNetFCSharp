@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System;
 using FalzoniNetFCSharp.Presentation.Administrator.Models.Common;
 using System.Net;
+using FalzoniNetFCSharp.Presentation.Administrator.Utils;
 
 namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
 {
@@ -14,7 +15,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
         #region TWO FACTORS
         public async Task<ICollection<string>> GetTwoFactorProviders()
         {
-            var url = UrlConfigurationHelper.IdentityUtilityGetTwoFactorProviders;
+            var url = $"{PathUtils.GetApiPath()}/IdentityUtility/GetTwoFactorProviders";
 
             using (HttpClient client = new HttpClient())
             {
@@ -38,7 +39,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
 
         public async Task SendTwoFactorProviderCode(SendCodeModel model)
         {
-            var url = UrlConfigurationHelper.IdentityUtilitySendTwoFactorProviderCode;
+            var url = $"{PathUtils.GetApiPath()}/IdentityUtility/SendTwoFactorProviderCode";
 
             using (HttpClient client = new HttpClient())
             {
@@ -61,7 +62,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
 
         public async Task<ReturnVerifyCodeModel> VerifyCodeTwoFactor(VerifyCodeModel model)
         {
-            string url = UrlConfigurationHelper.IdentityUtilityVerifyCodeTwoFactor;
+            var url = $"{PathUtils.GetApiPath()}/IdentityUtility/VerifyCodeTwoFactor";
 
             using (HttpClient client = new HttpClient())
             {
@@ -87,7 +88,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
         #region PHONE AND E-MAIL CONFIRMATION
         public async Task<string> SendEmailConfirmationCode(GenerateTokenEmailModel model)
         {
-            string url = UrlConfigurationHelper.IdentityUtilitySendEmailConfirmationCode;
+            var url = $"{PathUtils.GetApiPath()}/IdentityUtility/SendEmailConfirmationCode";
 
             using (HttpClient client = new HttpClient())
             {
@@ -111,7 +112,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
 
         public async Task<string> SendPhoneConfirmationCode(GenerateTokenPhoneModel model)
         {
-            string url = UrlConfigurationHelper.IdentityUtilitySendPhoneConfirmationCode;
+            var url = $"{PathUtils.GetApiPath()}/IdentityUtility/SendPhoneConfirmationCode";
 
             using (HttpClient client = new HttpClient())
             {
@@ -135,7 +136,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
 
         public async Task<string> VerifyEmailConfirmationCode(ConfirmEmailCodeModel model)
         {
-            string url = UrlConfigurationHelper.IdentityUtilityVerifyEmailConfirmationCode;
+            var url = $"{PathUtils.GetApiPath()}/IdentityUtility/VerifyEmailConfirmationCode";
 
             using (HttpClient client = new HttpClient())
             {
@@ -159,7 +160,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
 
         public async Task<string> VerifyPhoneConfirmationCode(ConfirmPhoneCodeModel model)
         {
-            string url = UrlConfigurationHelper.IdentityUtilityVerifyPhoneConfirmationCode;
+            var url = $"{PathUtils.GetApiPath()}/IdentityUtility/VerifyPhoneConfirmationCode";
 
             using (HttpClient client = new HttpClient())
             {

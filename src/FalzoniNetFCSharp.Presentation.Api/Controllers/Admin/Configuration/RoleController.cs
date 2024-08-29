@@ -86,6 +86,35 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Configuration
         }
 
         /// <summary>
+        /// Listar acessos para tabela
+        /// </summary>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="500">Internal Server Error</response>
+        /// <remarks>Listagem de dados dos acessos para geração de tabela</remarks>
+        /// <returns></returns>
+        // GET Api/Role/GetDataTable
+        [HttpGet]
+        [Route("GetDataTable")]
+        public HttpResponseMessage GetDataTable()
+        {
+            string action = this.ActionContext.ActionDescriptor.ActionName;
+            try
+            {
+                _logger.Info(action + " - Iniciado");
+                var retorno = _roleServiceApplication.GetAll();
+
+                _logger.Info(action + " - Sucesso!");
+
+                _logger.Info(action + " - Finalizado");
+                return Request.CreateResponse(HttpStatusCode.OK, retorno);
+            }
+            catch (Exception ex)
+            {
+                return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
+            }
+        }
+
+        /// <summary>
         /// Listar usuário pelo Id
         /// </summary>
         /// <response code="400">Bad Request</response>

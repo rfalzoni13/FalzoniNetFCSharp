@@ -14,6 +14,12 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Stock
 {
     public class ProductClient : BaseClient<ProductModel>, IProductClient
     {
+        public ProductClient()
+            :base()
+        {
+            url += "Product";
+        }
+
         public async Task<ProductTableModel> GetTableAsync(string url)
         {
             var table = new ProductTableModel();

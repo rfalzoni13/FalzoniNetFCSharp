@@ -11,6 +11,8 @@ using Microsoft.Owin.Security;
 using System.Linq;
 using FalzoniNetFCSharp.Presentation.Administrator.Models.Common;
 using System.Net;
+using FalzoniNetFCSharp.Presentation.Administrator.Utils;
+using Ninject.Activation;
 
 namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
 {
@@ -19,7 +21,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
         #region LOGIN
         public async Task Login(LoginModel model, HttpRequestBase request)
         {
-            var url = UrlConfigurationHelper.AccountLogin;
+            var url = $"{PathUtils.GetApiPath()}/Account/Login";
 
             using (HttpClient httpClient = new HttpClient())
             {
@@ -59,22 +61,24 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
 
                     request.GetOwinContext().Authentication.SignIn(options, identity);
                 }
-                switch(response.StatusCode)
+                else
                 {
-                    case HttpStatusCode.NotFound:
-                        throw new ApplicationException("Caminho ou serviço não encontrado!");
+                    switch (response.StatusCode)
+                    {
+                        case HttpStatusCode.NotFound:
+                            throw new ApplicationException("Caminho ou serviço não encontrado!");
+                        default:
+                            var errorResponse = await response.Content.ReadAsAsync<ResponseErrorLogin>();
 
-                    default:
-                        var errorResponse = await response.Content.ReadAsAsync<ResponseErrorLogin>();
-
-                        throw new ApplicationException(!string.IsNullOrEmpty(errorResponse.error_description) ? errorResponse.error_description : errorResponse.error);
+                            throw new ApplicationException(!string.IsNullOrEmpty(errorResponse.error_description) ? errorResponse.error_description : errorResponse.error);
+                    }
                 }
             }
         }
 
         public async Task RefreshToken()
         {
-            var url = UrlConfigurationHelper.AccountLogin;
+            var url = $"{PathUtils.GetApiPath()}/Account/Login";
 
             string refreshToken = HttpContext.Current.GetOwinContext().Authentication.User.Claims
                 .FirstOrDefault(x => x.Type.Contains("RefreshToken")).Value
@@ -116,22 +120,25 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
 
                     HttpContext.Current.GetOwinContext().Authentication.SignIn(options, identity);
                 }
-                switch(response.StatusCode)
+                else
                 {
-                    case HttpStatusCode.NotFound:
-                        throw new ApplicationException("Caminho ou serviço não encontrado!");
+                    switch (response.StatusCode)
+                    {
+                        case HttpStatusCode.NotFound:
+                            throw new ApplicationException("Caminho ou serviço não encontrado!");
 
-                    default:
-                        var errorResponse = await response.Content.ReadAsAsync<ResponseErrorLogin>();
+                        default:
+                            var errorResponse = await response.Content.ReadAsAsync<ResponseErrorLogin>();
 
-                        throw new ApplicationException(!string.IsNullOrEmpty(errorResponse.error_description) ? errorResponse.error_description : errorResponse.error);
+                            throw new ApplicationException(!string.IsNullOrEmpty(errorResponse.error_description) ? errorResponse.error_description : errorResponse.error);
+                    }
                 }
             }
         }
 
         public async Task Logout(HttpRequestBase request)
         {
-            var url = UrlConfigurationHelper.AccountLogout;
+            var url = $"{PathUtils.GetApiPath()}/Account/Logout";
 
             using (HttpClient client = new HttpClient())
             {
@@ -141,15 +148,18 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
                     HttpContext.Current.Session.Clear();
                     request.GetOwinContext().Authentication.SignOut("ApplicationCookie");
                 }
-                switch (response.StatusCode)
+                else
                 {
-                    case HttpStatusCode.NotFound:
-                        throw new ApplicationException("Caminho ou serviço não encontrado!");
+                    switch (response.StatusCode)
+                    {
+                        case HttpStatusCode.NotFound:
+                            throw new ApplicationException("Caminho ou serviço não encontrado!");
 
-                    default:
-                        StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
+                        default:
+                            StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
 
-                        throw new Exception(statusCode.Message);
+                            throw new Exception(statusCode.Message);
+                    }
                 }
             }
         }
@@ -158,7 +168,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
         #region EXTERNAL LOGIN
         public async Task ExternalLogin(string provider)
         {
-            var url = $"{UrlConfigurationHelper.AccountExternalLogin}?provider={provider}";
+            var url = $"{PathUtils.GetApiPath()}/Account/ExternalLogin?provider ={provider}";
 
             using (HttpClient client = new HttpClient())
             {
@@ -181,7 +191,8 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
 
         public async Task<IList<ExternalLoginModel>> GetExternalLogins()
         {
-            string url = UrlConfigurationHelper.AccountGetExternalLogins;
+
+            var url = $"{PathUtils.GetApiPath()}/Account/GetExternalLogins";
 
             using (HttpClient client = new HttpClient())
             {
@@ -205,7 +216,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
 
         public async Task<IList<IdentityResultCodeModel>> AddExternalLogin(AddExternalLoginBindingModel model)
         {
-            string url = UrlConfigurationHelper.AccountAddExternalLogin;
+            var url = $"{PathUtils.GetApiPath()}/Account/AddExternalLogin";
 
             using (HttpClient client = new HttpClient())
             {
@@ -229,7 +240,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
 
         public async Task<IList<IdentityResultCodeModel>> AddUserExternalLogin(RegisterExternalBindingModel model)
         {
-            string url = UrlConfigurationHelper.AccountAddUserExternalLogin;
+            var url = $"{PathUtils.GetApiPath()}/Account/AddUserExternalLogin";
 
             using (HttpClient client = new HttpClient())
             {
@@ -253,7 +264,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
 
         public async Task<IList<IdentityResultCodeModel>> RemoveExternalLogin(RegisterExternalBindingModel model)
         {
-            string url = UrlConfigurationHelper.AccountRemoveExternalLogin;
+            var url = $"{PathUtils.GetApiPath()}/Account/RemoveExternalLogin";
 
             using (HttpClient client = new HttpClient())
             {
@@ -279,7 +290,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
         #region PASSWORD
         public async Task<IdentityResultCodeModel> ChangePassword(ChangePasswordModel model)
         {
-            var url = UrlConfigurationHelper.AccountChangePassword;
+            var url = $"{PathUtils.GetApiPath()}/Account/ChangePassword";
 
             using (HttpClient client = new HttpClient())
             {
@@ -303,7 +314,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
 
         public async Task<string> ForgotPassword(ForgotPasswordModel model)
         {
-            var url = UrlConfigurationHelper.AccountForgotPassword;
+            var url = $"{PathUtils.GetApiPath()}/Account/ForgotPassword";
 
             using (HttpClient client = new HttpClient())
             {
@@ -327,7 +338,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
 
         public async Task<IdentityResultCodeModel> ResetPassword(ResetPasswordModel model)
         {
-            var url = UrlConfigurationHelper.AccountResetPassword;
+            var url = $"{PathUtils.GetApiPath()}/Account/ResetPassword";
 
             using (HttpClient client = new HttpClient())
             {

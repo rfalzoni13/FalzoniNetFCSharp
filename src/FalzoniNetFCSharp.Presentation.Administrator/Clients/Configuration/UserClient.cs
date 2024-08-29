@@ -4,6 +4,7 @@ using FalzoniNetFCSharp.Presentation.Administrator.Models.Common;
 using FalzoniNetFCSharp.Presentation.Administrator.Models.Configuration;
 using FalzoniNetFCSharp.Presentation.Administrator.Models.Identity;
 using FalzoniNetFCSharp.Presentation.Administrator.Models.Tables.Configuration;
+using FalzoniNetFCSharp.Presentation.Administrator.Utils;
 using FalzoniNetFCSharp.Utils.Helpers;
 using System;
 using System.Collections.Generic;
@@ -15,15 +16,18 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Configuration
 {
     public class UserClient : BaseClient<UserModel>, IUserClient
     {
-        public UserClient() :base() { }
+        public UserClient() :base() 
+        {
+            url += "User";
+        }
 
-        public override async Task<UserModel> GetAsync(string url, string id)
+        public override async Task<UserModel> GetAsync(string id)
         {
             using (HttpClient client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
-                HttpResponseMessage response = await client.GetAsync($"{url}?id={id}");
+                HttpResponseMessage response = await client.GetAsync($"{url}/GetAsync?id={id}");
                 if (response.IsSuccessStatusCode)
                 {
                     var model = await response.Content.ReadAsAsync<UserModel>();
@@ -90,7 +94,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Configuration
             return await Task.FromResult(table);
         }
 
-        public override string Add(string url, UserModel obj)
+        public override string Add(UserModel obj)
         {
             var model = new ApplicationUserModel(obj);
 
@@ -98,7 +102,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Configuration
             {
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
-                HttpResponseMessage response = client.PostAsJsonAsync(url, model).Result;
+                HttpResponseMessage response = client.PostAsJsonAsync($"{url}/Add", model).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     return response.Content.ReadAsStringAsync().Result;
@@ -112,7 +116,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Configuration
             }
         }
 
-        public override string Update(string url, UserModel obj)
+        public override string Update(UserModel obj)
         {
             var model = new ApplicationUserModel(obj);
 
@@ -120,7 +124,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Configuration
             {
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
-                HttpResponseMessage response = client.PutAsJsonAsync(url, model).Result;
+                HttpResponseMessage response = client.PutAsJsonAsync($"{url}/Update", model).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     return response.Content.ReadAsStringAsync().Result;

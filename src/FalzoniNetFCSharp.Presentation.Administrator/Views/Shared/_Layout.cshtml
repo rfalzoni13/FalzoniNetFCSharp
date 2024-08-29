@@ -260,6 +260,17 @@
                     </li>
                     <li class="treeview">
                         <a href="#">
+                            <i class="glyphicon glyphicon-sort"></i> <span>Edtoque</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li class="@(ViewContext.RouteData.Values["controller"].ToString() == "Product" ? "active" : string.Empty)"><a href="@Url.Action("Index", "Product", new { area = "Stock" })"><i class="glyphicon glyphicon-barcode"></i> Produtos</a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
                             <i class="glyphicon glyphicon-cog"></i> <span>Configurações</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>

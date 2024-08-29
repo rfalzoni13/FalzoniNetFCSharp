@@ -14,7 +14,10 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Register
 {
     public class CustomerClient : BaseClient<CustomerModel>, ICustomerClient
     {
-        public CustomerClient() :base() { }
+        public CustomerClient() :base() 
+        {
+            url += "Customer";
+        }
 
         public async Task<CustomerTableModel> GetTableAsync(string url)
         {
