@@ -1,8 +1,8 @@
 ﻿using FalzoniNetFCSharp.Application.ServiceApplication.Configuration;
 using FalzoniNetFCSharp.Application.ServiceApplication.Identity;
-using FalzoniNetFCSharp.Domain.Interfaces.Base;
-using FalzoniNetFCSharp.Domain.Interfaces.Register;
-using FalzoniNetFCSharp.Domain.Interfaces.Stock;
+using FalzoniNetFCSharp.Domain.Interfaces.Repositories.Base;
+using FalzoniNetFCSharp.Domain.Interfaces.Repositories.Register;
+using FalzoniNetFCSharp.Domain.Interfaces.Repositories.Stock;
 using FalzoniNetFCSharp.Infra.Data.Context.MySql;
 using FalzoniNetFCSharp.Infra.Data.Context.SqlServer;
 using FalzoniNetFCSharp.Infra.Data.Repositories.Base;

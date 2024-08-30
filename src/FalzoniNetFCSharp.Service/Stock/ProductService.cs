@@ -1,6 +1,6 @@
 ﻿using FalzoniNetFCSharp.Domain.DTO.Stock;
-using FalzoniNetFCSharp.Domain.Interfaces.Base;
-using FalzoniNetFCSharp.Domain.Interfaces.Stock;
+using FalzoniNetFCSharp.Domain.Interfaces.Repositories.Base;
+using FalzoniNetFCSharp.Domain.Interfaces.Repositories.Stock;
 using FalzoniNetFCSharp.Service.Base;
 using System;
 using System.Collections.Generic;

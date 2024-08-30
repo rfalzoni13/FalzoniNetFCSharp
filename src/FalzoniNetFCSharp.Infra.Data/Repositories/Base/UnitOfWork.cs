@@ -1,4 +1,4 @@
-﻿using FalzoniNetFCSharp.Domain.Interfaces.Base;
+﻿using FalzoniNetFCSharp.Domain.Interfaces.Repositories.Base;
 using System.Data.Entity;
 
 namespace FalzoniNetFCSharp.Infra.Data.Repositories.Base

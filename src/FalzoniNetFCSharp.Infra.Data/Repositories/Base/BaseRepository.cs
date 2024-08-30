@@ -1,4 +1,4 @@
-﻿using FalzoniNetFCSharp.Domain.Interfaces.Base;
+﻿using FalzoniNetFCSharp.Domain.Interfaces.Repositories.Base;
 using FalzoniNetFCSharp.Infra.Data.Context;
 using FalzoniNetFCSharp.Infra.Data.Context.MySql;
 using FalzoniNetFCSharp.Infra.Data.Context.SqlServer;

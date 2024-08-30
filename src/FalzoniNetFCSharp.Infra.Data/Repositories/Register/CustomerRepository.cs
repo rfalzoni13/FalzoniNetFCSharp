@@ -1,5 +1,5 @@
 ﻿using FalzoniNetFCSharp.Domain.Entities.Register;
-using FalzoniNetFCSharp.Domain.Interfaces.Register;
+using FalzoniNetFCSharp.Domain.Interfaces.Repositories.Register;
 using FalzoniNetFCSharp.Infra.Data.Context;
 using FalzoniNetFCSharp.Infra.Data.Repositories.Base;
 using System;

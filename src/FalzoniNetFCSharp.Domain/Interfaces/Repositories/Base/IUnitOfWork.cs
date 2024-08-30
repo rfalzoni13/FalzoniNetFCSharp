@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
 
-namespace FalzoniNetFCSharp.Domain.Interfaces.Base
+namespace FalzoniNetFCSharp.Domain.Interfaces.Repositories.Base
 {
     public interface IUnitOfWork : IDisposable
     {

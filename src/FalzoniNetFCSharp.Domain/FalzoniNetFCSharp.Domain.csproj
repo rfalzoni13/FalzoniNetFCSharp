@@ -76,12 +76,12 @@
     <Compile Include="Entities\Register\CustomerAddress.cs" />
     <Compile Include="Entities\Register\ProductCategory.cs" />
     <Compile Include="Entities\Stock\Product.cs" />
-    <Compile Include="Interfaces\Base\IBaseRepository.cs" />
-    <Compile Include="Interfaces\Base\IUnitOfWork.cs" />
-    <Compile Include="Interfaces\Register\ICustomerAddressRepository.cs" />
-    <Compile Include="Interfaces\Register\ICustomerRepository.cs" />
-    <Compile Include="Interfaces\Register\IProductCategoryRepository.cs" />
-    <Compile Include="Interfaces\Stock\IProductRepository.cs" />
+    <Compile Include="Interfaces\Repositories\Base\IBaseRepository.cs" />
+    <Compile Include="Interfaces\Repositories\Base\IUnitOfWork.cs" />
+    <Compile Include="Interfaces\Repositories\Register\ICustomerAddressRepository.cs" />
+    <Compile Include="Interfaces\Repositories\Register\ICustomerRepository.cs" />
+    <Compile Include="Interfaces\Repositories\Register\IProductCategoryRepository.cs" />
+    <Compile Include="Interfaces\Repositories\Stock\IProductRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

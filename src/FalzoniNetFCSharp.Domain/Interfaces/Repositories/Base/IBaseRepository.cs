@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 
-namespace FalzoniNetFCSharp.Domain.Interfaces.Base
+namespace FalzoniNetFCSharp.Domain.Interfaces.Repositories.Base
 {
     public interface IBaseRepository<T> where T : class
     {

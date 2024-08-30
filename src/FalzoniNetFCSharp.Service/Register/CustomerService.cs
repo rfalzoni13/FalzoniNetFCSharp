@@ -1,6 +1,6 @@
 ﻿using FalzoniNetFCSharp.Domain.DTO.Register;
-using FalzoniNetFCSharp.Domain.Interfaces.Base;
-using FalzoniNetFCSharp.Domain.Interfaces.Register;
+using FalzoniNetFCSharp.Domain.Interfaces.Repositories.Base;
+using FalzoniNetFCSharp.Domain.Interfaces.Repositories.Register;
 using FalzoniNetFCSharp.Service.Base;
 using System;
 using System.Collections.Generic;
