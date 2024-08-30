@@ -207,7 +207,7 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Base
 
         //            _logger.Info(action + " - Finalizado");
 
-        //            return Request.CreateResponse(HttpStatusCode.OK, "Produto atualizado com sucesso!");
+        //            return Request.CreateResponse(HttpStatusCode.OK, "Registro atualizado com sucesso!");
         //        }
         //        else
         //        {
@@ -279,7 +279,7 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Base
 
         //            _logger.Info(action + " - Finalizado");
 
-        //            return Request.CreateResponse(HttpStatusCode.OK, "Produto excluído com sucesso!");
+        //            return Request.CreateResponse(HttpStatusCode.OK, "Registro excluído com sucesso!");
         //        }
         //        else
         //        {
