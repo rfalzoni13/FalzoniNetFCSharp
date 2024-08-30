@@ -161,10 +161,10 @@
     <Compile Include="Controllers\Admin\Identity\IdentityUtilityController.cs" />
     <Compile Include="Controllers\Admin\Register\CustomerController.cs" />
     <Compile Include="Controllers\Admin\Stock\ProductController.cs" />
+    <Compile Include="Controllers\Base\BaseController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Base\BaseModel.cs" />
     <Compile Include="Models\Common\FileModel.cs" />
     <Compile Include="Models\Common\StatusCodeModel.cs" />
     <Compile Include="Models\Identity\AddExternalLoginBindingModel.cs" />
@@ -179,10 +179,6 @@
     <Compile Include="Models\Identity\RemoveLoginBindingModel.cs" />
     <Compile Include="Models\Identity\SendCodeModel.cs" />
     <Compile Include="Models\Identity\VerifyCodeModel.cs" />
-    <Compile Include="Models\Register\CustomerAddressModel.cs" />
-    <Compile Include="Models\Register\CustomerModel.cs" />
-    <Compile Include="Models\Register\ProductCategoryModel.cs" />
-    <Compile Include="Models\Stock\ProductModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\ChallengeResult.cs" />
@@ -216,6 +212,10 @@
     <ProjectReference Include="..\FalzoniNetFCSharp.Infra.IoC\FalzoniNetFCSharp.Infra.IoC.csproj">
       <Project>{067AD824-ABBD-4249-BD55-E86C8D756859}</Project>
       <Name>FalzoniNetFCSharp.Infra.IoC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FalzoniNetFCSharp.Service\FalzoniNetFCSharp.Service.csproj">
+      <Project>{5F5B7942-BCBD-485D-82C8-4ECEFAC62D58}</Project>
+      <Name>FalzoniNetFCSharp.Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\FalzoniNetFCSharp.Utils\FalzoniNetFCSharp.Utils.csproj">
       <Project>{303EC5AE-E7B2-4A7A-8AFF-5CFFC573B0F1}</Project>

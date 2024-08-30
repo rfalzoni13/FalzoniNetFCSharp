@@ -16,7 +16,6 @@ using Microsoft.AspNet.Identity;
 
 namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
 {
-    [RoutePrefix("Api/Account")]
     public class AccountController : ApiController
     {
         #region Attributes
@@ -39,7 +38,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
         /// <remarks>Deslogar do Sistema</remarks>
         /// <returns></returns>
         // POST: /Account/Logout
-        [Route("Logout")]
         public HttpResponseMessage Logout()
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -79,7 +77,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
         [OverrideAuthentication]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
         [HttpGet]
-        [Route("ExternalLogin", Name = "ExternalLogin")]
         public async Task<HttpResponseMessage> ExternalLogin(string provider, string error = null)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -126,7 +123,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
         /// <returns></returns>
         // GET: /Account/GetExtermalLogins
         [HttpGet]
-        [Route("GetExtermalLogins")]
         public HttpResponseMessage GetExtermalLogins(string returnUrl, bool generateState = false)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -187,7 +183,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
         /// <returns></returns>
         // POST: /Account/AddExternalLogin
         [HttpPost]
-        [Route("AddExternalLogin")]
         public async Task<HttpResponseMessage> AddExternalLogin(AddExternalLoginBindingModel model)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -222,7 +217,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
         /// <returns></returns>
         // POST: /Account/AddExternalUserLogin
         [HttpPost]
-        [Route("AddExternalUserLogin")]
         public async Task<HttpResponseMessage> AddExternalUserLogin(RegisterExternalBindingModel model)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -255,7 +249,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
         /// <returns></returns>
         // POST: /Account/RemoveExternalLogin
         [HttpPost]
-        [Route("RemoveExternalLogin")]
         public async Task<HttpResponseMessage> RemoveExternalLogin(RemoveLoginBindingModel model)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;

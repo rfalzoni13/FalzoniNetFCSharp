@@ -2,7 +2,6 @@
 using FalzoniNetFCSharp.Presentation.Administrator.Controllers.Base;
 using FalzoniNetFCSharp.Presentation.Administrator.Models.Configuration;
 using FalzoniNetFCSharp.Presentation.Administrator.Models.Tables.Configuration;
-using FalzoniNetFCSharp.Utils.Helpers;
 using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -16,6 +15,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Areas.Configuration.Contr
         public UserController(IUserClient userClient)
             :base(userClient)
         {
+            _userClient = userClient;
         }
 
         //GET: Configuration/User/LoadTable
@@ -26,7 +26,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Areas.Configuration.Contr
 
             try
             {
-                tabela = await _userClient.GetTableAsync(UrlConfigurationHelper.UserGetAll);
+                tabela = await _userClient.GetTableAsync();
             }
             catch (Exception ex)
             {

@@ -7,6 +7,6 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Interfaces.Stock
 {
     public interface IProductClient : IBaseClient<ProductModel>
     {
-        Task<ProductTableModel> GetTableAsync(string url);
+        Task<ProductTableModel> GetTableAsync();
     }
 }

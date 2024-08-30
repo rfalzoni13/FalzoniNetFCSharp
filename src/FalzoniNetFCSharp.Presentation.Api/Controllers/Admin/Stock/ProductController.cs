@@ -1,28 +1,20 @@
-﻿using FalzoniNetFCSharp.Application.ServiceApplication.Stock;
+﻿using FalzoniNetFCSharp.Domain.DTO.Stock;
 using FalzoniNetFCSharp.Presentation.Api.Attributes;
-using FalzoniNetFCSharp.Presentation.Api.Models.Stock;
-using FalzoniNetFCSharp.Presentation.Api.Utils;
-using NLog;
+using FalzoniNetFCSharp.Presentation.Api.Controllers.Base;
+using FalzoniNetFCSharp.Service.Stock;
 using System;
-using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
 namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Stock
 {
     [CustomAuthorize(Roles = "Administrator")]
-    [RoutePrefix("Api/Product")]
-    public class ProductController : ApiController
+    public class ProductController : BaseController<ProductDTO>
     {
-        #region Attributes
-        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly ProductServiceApplication _productServiceApplication;
-        #endregion
-
         #region Constructor
-        public ProductController(ProductServiceApplication productServiceApplication)
+        public ProductController(ProductService productService)
+            :base(productService)
         {
-            _productServiceApplication = productServiceApplication;
         }
         #endregion
 
@@ -36,25 +28,9 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Stock
         /// <returns></returns>
         // GET Api/Product/GetAll
         [HttpGet]
-        [Route("GetAll")]
-        public HttpResponseMessage GetAll()
+        public override HttpResponseMessage GetAll()
         {
-            string action = this.ActionContext.ActionDescriptor.ActionName;
-            _logger.Info(action + " - Iniciado");
-            try
-            {
-                var retorno = _productServiceApplication.GetAll();
-
-                _logger.Info(action + " - Sucesso!");
-
-                _logger.Info(action + " - Finalizado");
-                return Request.CreateResponse(HttpStatusCode.OK, retorno);
-            }
-
-            catch (Exception ex)
-            {
-                return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
-            }
+            return base.GetAll();
         }
 
         /// <summary>
@@ -66,36 +42,11 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Stock
         /// <remarks>Retorna o produto através do Id do mesmo</remarks>
         /// <param name="Id">Id do produto</param>
         /// <returns></returns>
-        // GET Api/Product/Get?id={Id}
+        // GET Api/Product/Get/{Id}
         [HttpGet]
-        [Route("Get")]
-        public HttpResponseMessage Get(Guid Id)
+        public override HttpResponseMessage Get(Guid Id)
         {
-            string action = this.ActionContext.ActionDescriptor.ActionName;
-            _logger.Info(action + " - Iniciado");
-
-            try
-            {
-                _logger.Info(action + " - Iniciado");
-                if (Guid.Equals(Id, Guid.Empty))
-                    throw new ApplicationException("Parâmetro incorreto!");
-
-                var product = _productServiceApplication.Get(Id);
-
-                _logger.Info(action + " - Sucesso!");
-
-                _logger.Info(action + " - Finalizado");
-                return Request.CreateResponse(HttpStatusCode.OK, product);
-            }
-            catch (ApplicationException ex)
-            {
-                return ResponseManager.ReturnBadRequest(ex, Request, _logger, action);
-            }
-
-            catch (Exception ex)
-            {
-                return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
-            }
+            return base.Get(Id);
         }
         #endregion
 
@@ -107,94 +58,14 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Stock
         /// <response code="401">Unauthorized</response>
         /// <response code="500">Internal Server Error</response>
         /// <remarks>Insere um novo produto passando um objeto no body da requisição no método POST</remarks>
-        /// <param name="model">Objeto de registro produto</param>
+        /// <param name="dto">Objeto de registro produto</param>
         /// <returns></returns>
         // POST Api/Product/Add
         [HttpPost]
-        [Route("Add")]
-        public HttpResponseMessage Add([FromBody] ProductModel model)
+        public override HttpResponseMessage Add([FromBody] ProductDTO dto)
         {
-            string action = this.ActionContext.ActionDescriptor.ActionName;
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    _logger.Info(action + " - Iniciado");
-
-                    var productDTO = model.ConvertToDTO();
-
-                    _productServiceApplication.Add(productDTO);
-
-                    _logger.Info(action + " - Sucesso!");
-
-                    _logger.Info(action + " - Finalizado");
-
-                    return Request.CreateResponse(HttpStatusCode.Created, "Cliente incluído com sucesso!");
-                }
-                else
-                {
-                    throw new ApplicationException("Por favor, preencha os campos corretamente!");
-                }
-            }
-
-            catch (ApplicationException ex)
-            {
-                return ResponseManager.ReturnBadRequest(ex, Request, _logger, action);
-            }
-
-            catch (Exception ex)
-            {
-                return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
-            }
+            return base.Add(dto);
         }
-
-        ///// <summary>
-        ///// Inserir produto modo assíncrono
-        ///// </summary>
-        ///// <response code="400">Bad Request</response>
-        ///// <response code="401">Unauthorized</response>
-        ///// <response code="500">Internal Server Error</response>
-        ///// <remarks>Insere um novo produto passando um objeto no body da requisição no método POST de forma assíncrona</remarks>
-        ///// <param name="model">Objeto de registro produto</param>
-        ///// <returns></returns>
-        // POST: Api/Product/AddAsync
-        //[HttpPost]
-        //[Route("AddAsync")]
-        //public async Task<HttpResponseMessage> AddAsync([FromBody] ProductModel model)
-        //{
-        //    string action = this.ActionContext.ActionDescriptor.ActionName;
-        //    try
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            _logger.Info(action + " - Iniciado");
-
-        //            var productDTO = model.ConvertToDTO();
-
-        //            await _productServiceApplication.AddAsync(productDTO);
-
-        //            _logger.Info(action + " - Sucesso!");
-
-        //            _logger.Info(action + " - Finalizado");
-
-        //            return Request.CreateResponse(HttpStatusCode.Created, "Cliente incluído com sucesso!");
-        //        }
-        //        else
-        //        {
-        //            throw new ApplicationException("Por favor, preencha os campos corretamente!");
-        //        }
-        //    }
-
-        //    catch (ApplicationException ex)
-        //    {
-        //        return ResponseManager.ReturnBadRequest(ex, Request, _logger, action);
-        //    }
-
-        //    catch (Exception ex)
-        //    {
-        //        return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
-        //    }
-        //}
         #endregion
 
         #region Update Product
@@ -205,93 +76,14 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Stock
         /// <response code="401">Unauthorized</response>
         /// <response code="500">Internal Server Error</response>
         /// <remarks>Atualiza o produto passando o objeto no body da requisição pelo método PUT</remarks>
-        /// <param name="model">Objeto de registro do produto</param>
+        /// <param name="dto">Objeto de registro do produto</param>
         /// <returns></returns>
         // PUT Api/Product/Update
         [HttpPut]
-        [Route("Update")]
-        public HttpResponseMessage Update([FromBody] ProductModel model)
+        public override HttpResponseMessage Update([FromBody] ProductDTO dto)
         {
-            string action = this.ActionContext.ActionDescriptor.ActionName;
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    _logger.Info(action + " - Iniciado");
-
-                    var productDTO = model.ConvertToDTO();
-
-                    _productServiceApplication.Update(productDTO);
-
-                    _logger.Info(action + " - Sucesso!");
-
-                    _logger.Info(action + " - Finalizado");
-
-                    return Request.CreateResponse(HttpStatusCode.OK, "Produto atualizado com sucesso!");
-                }
-                else
-                {
-                    throw new ApplicationException("Por favor, preencha os campos corretamente!");
-                }
-            }
-
-            catch (ApplicationException ex)
-            {
-                return ResponseManager.ReturnBadRequest(ex, Request, _logger, action);
-            }
-
-            catch (Exception ex)
-            {
-                return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
-            }
+            return base.Update(dto);
         }
-
-        ///// <summary>
-        ///// Atualizar produto modo assíncrono
-        ///// </summary>
-        ///// <response code="400">Bad Request</response>
-        ///// <response code="401">Unauthorized</response>
-        ///// <response code="500">Internal Server Error</response>
-        ///// <remarks>Atualiza o produto passando o objeto no body da requisição pelo método PUT de forma assíncrona</remarks>
-        ///// <param name="model">Objeto de registro do produto</param>
-        // PUT: Api/Product/UpdateAsync
-        //[HttpPut]
-        //[Route("UpdateAsync")]
-        //public async Task<HttpResponseMessage> UpdateAsync([FromBody] ProductModel model)
-        //{
-        //    string action = this.ActionContext.ActionDescriptor.ActionName;
-        //    try
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            _logger.Info(action + " - Iniciado");
-
-        //            var productDTO = model.ConvertToDTO();
-
-        //            await _productServiceApplication.UpdateAsync(productDTO);
-
-        //            _logger.Info(action + " - Sucesso!");
-
-        //            _logger.Info(action + " - Finalizado");
-
-        //            return Request.CreateResponse(HttpStatusCode.OK, "Produto atualizado com sucesso!");
-        //        }
-        //        else
-        //        {
-        //            throw new ApplicationException("Por favor, preencha os campos corretamente!");
-        //        }
-        //    }
-
-        //    catch (ApplicationException ex)
-        //    {
-        //        return ResponseManager.ReturnBadRequest(ex, Request, _logger, action);
-        //    }
-
-        //    catch (Exception ex)
-        //    {
-        //        return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
-        //    }
-        //}
         #endregion
 
         #region Delete Product
@@ -302,92 +94,14 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Stock
         /// <response code="401">Unauthorized</response>
         /// <response code="500">Internal Server Error</response>
         /// <remarks>Exclui o produto passando o objeto no body da requisição pelo método DELETE</remarks>
-        /// <param name="model">Objeto de registro do produto</param>
+        /// <param name="Id">Id de identificação do produto</param>
         /// <returns></returns>
         // DELETE Api/Product/Delete
         [HttpDelete]
-        [Route("Delete")]
-        public HttpResponseMessage Delete([FromBody] ProductModel model)
+        public override HttpResponseMessage Delete([FromUri] Guid Id)
         {
-            string action = this.ActionContext.ActionDescriptor.ActionName;
-            _logger.Info(action + " - Iniciado");
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    var productDTO = model.ConvertToDTO();
-
-                    _productServiceApplication.Delete(productDTO);
-
-                    _logger.Info(action + " - Sucesso!");
-
-                    _logger.Info(action + " - Finalizado");
-
-                    return Request.CreateResponse(HttpStatusCode.OK, "Produto excluído com sucesso!");
-                }
-                else
-                {
-                    throw new ApplicationException("Por favor, preencha os campos corretamente!");
-                }
-            }
-
-            catch (ApplicationException ex)
-            {
-                return ResponseManager.ReturnBadRequest(ex, Request, _logger, action);
-            }
-
-            catch (Exception ex)
-            {
-                return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
-            }
+            return base.Delete(Id);
         }
-
-        ///// <summary>
-        ///// Excluir produto assíncrono
-        ///// </summary>
-        ///// <response code="400">Bad Request</response>
-        ///// <response code="401">Unauthorized</response>
-        ///// <response code="500">Internal Server Error</response>
-        ///// <remarks>Exclui o produto passando o objeto no body da requisição pelo método DELETE de forma assíncrona</remarks>
-        ///// <param name="model">Objeto de registro do produto</param>
-        ///// <returns></returns>
-        //// DELETE: Api/Product/DeleteAsync
-        //[HttpDelete]
-        //[Route("DeleteAsync")]
-        //public async Task<HttpResponseMessage> DeleteAsync([FromBody] ProductModel model)
-        //{
-        //    string action = this.ActionContext.ActionDescriptor.ActionName;
-        //    _logger.Info(action + " - Iniciado");
-        //    try
-        //    {
-        //        if (ModelState.IsValid)
-        //        {
-        //            var productDTO = model.ConvertToDTO();
-
-        //            await _productServiceApplication.DeleteAsync(productDTO);
-
-        //            _logger.Info(action + " - Sucesso!");
-
-        //            _logger.Info(action + " - Finalizado");
-
-        //            return Request.CreateResponse(HttpStatusCode.OK, "Produto excluído com sucesso!");
-        //        }
-        //        else
-        //        {
-        //            throw new ApplicationException("Por favor, preencha os campos corretamente!");
-        //        }
-        //    }
-
-        //    catch (ApplicationException ex)
-        //    {
-        //        return ResponseManager.ReturnBadRequest(ex, Request, _logger, action);
-        //    }
-
-        //    catch (Exception ex)
-        //    {
-        //        return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
-        //    }
-        //}
         #endregion
     }
 }

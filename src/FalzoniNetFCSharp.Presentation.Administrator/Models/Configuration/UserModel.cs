@@ -1,11 +1,11 @@
 ﻿using FalzoniNetFCSharp.Presentation.Administrator.Models.Base;
-using FalzoniNetFCSharp.Utils.Helpers;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
-using System;
-using System.Web.Mvc;
 using FalzoniNetFCSharp.Presentation.Administrator.Models.Common;
+using FalzoniNetFCSharp.Presentation.Administrator.Utils;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace FalzoniNetFCSharp.Presentation.Administrator.Models.Configuration
 {
@@ -63,7 +63,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Models.Configuration
         //Methods
         public void LoadProfilePhoto()
         {
-            PhotoPath = !string.IsNullOrEmpty(PhotoPath) ? $"{UrlConfigurationHelper.PathUrl}\\{PhotoPath}" : PhotoPath;
+            PhotoPath = !string.IsNullOrEmpty(PhotoPath) ? $"{PathUtils.GetApiPath()}/{PhotoPath}" : PhotoPath;
         }
 
     }

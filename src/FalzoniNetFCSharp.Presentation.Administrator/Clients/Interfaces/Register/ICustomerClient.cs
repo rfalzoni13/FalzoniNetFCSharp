@@ -7,6 +7,6 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Interfaces.Regist
 {
     public interface ICustomerClient : IBaseClient<CustomerModel>
     {
-        Task<CustomerTableModel> GetTableAsync(string url);
+        Task<CustomerTableModel> GetTableAsync();
     }
 }

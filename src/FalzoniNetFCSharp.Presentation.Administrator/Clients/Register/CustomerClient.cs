@@ -1,14 +1,14 @@
 ﻿using FalzoniNetFCSharp.Presentation.Administrator.Clients.Base;
 using FalzoniNetFCSharp.Presentation.Administrator.Clients.Interfaces.Register;
+using FalzoniNetFCSharp.Presentation.Administrator.Models.Common;
 using FalzoniNetFCSharp.Presentation.Administrator.Models.Register;
 using FalzoniNetFCSharp.Presentation.Administrator.Models.Tables.Register;
 using FalzoniNetFCSharp.Utils.Helpers;
-using System.Collections.Generic;
-using System.Net.Http;
 using System;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using System.Linq;
-using FalzoniNetFCSharp.Presentation.Administrator.Models.Common;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Register
 {
@@ -16,10 +16,10 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Register
     {
         public CustomerClient() :base() 
         {
-            url += "Customer";
+            url += "/Customer";
         }
 
-        public async Task<CustomerTableModel> GetTableAsync(string url)
+        public async Task<CustomerTableModel> GetTableAsync()
         {
             var table = new CustomerTableModel();
 
@@ -29,7 +29,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Register
                 {
                     client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
-                    HttpResponseMessage response = await client.GetAsync(url);
+                    HttpResponseMessage response = await client.GetAsync($"{url}/GetAll");
 
                     if (response.IsSuccessStatusCode)
                     {

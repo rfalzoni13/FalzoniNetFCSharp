@@ -30,7 +30,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Attributes
                     var user = filterContext.HttpContext.Session["UserData"] as UserModel;
                     if (user == null)
                     {
-                        user = Task.Run(async () => await userClient.GetAsync(UrlConfigurationHelper.UserGet, userId)).Result;
+                        user = Task.Run(async () => await userClient.GetAsync(userId)).Result;
                     }
 
                     filterContext.HttpContext.Session["UserData"] = user;
@@ -46,7 +46,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Attributes
                     filterContext.Controller.TempData["Return"] = new ReturnModel
                     {
                         Type = "Error",
-                        Message = ex.Message
+                        Message = ex.InnerException != null ? ex.InnerException.Message : ex.Message
                     };
                     filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new
                     {

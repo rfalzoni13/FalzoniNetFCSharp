@@ -1,15 +1,9 @@
-﻿using FalzoniNetFCSharp.Presentation.Administrator.Clients.Interfaces.Register;
-using FalzoniNetFCSharp.Presentation.Administrator.Clients.Interfaces.Stock;
+﻿using FalzoniNetFCSharp.Presentation.Administrator.Clients.Interfaces.Stock;
 using FalzoniNetFCSharp.Presentation.Administrator.Controllers.Base;
 using FalzoniNetFCSharp.Presentation.Administrator.Models.Stock;
-using FalzoniNetFCSharp.Presentation.Administrator.Models.Tables.Register;
 using FalzoniNetFCSharp.Presentation.Administrator.Models.Tables.Stock;
-using FalzoniNetFCSharp.Utils.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace FalzoniNetFCSharp.Presentation.Administrator.Areas.Stock.Controllers
@@ -32,7 +26,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Areas.Stock.Controllers
 
             try
             {
-                table = await _productClient.GetTableAsync(UrlConfigurationHelper.ProductGetAll);
+                table = await _productClient.GetTableAsync();
             }
             catch (Exception ex)
             {

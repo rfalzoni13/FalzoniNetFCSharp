@@ -1,13 +1,14 @@
-﻿using FalzoniNetFCSharp.Domain.Interfaces.Register;
-using FalzoniNetFCSharp.Domain.DTO.Register;
+﻿using FalzoniNetFCSharp.Domain.DTO.Register;
 using FalzoniNetFCSharp.Domain.Interfaces.Base;
+using FalzoniNetFCSharp.Domain.Interfaces.Register;
+using FalzoniNetFCSharp.Service.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace FalzoniNetFCSharp.Service.Register
 {
-    public class CustomerService
+    public class CustomerService : ServiceBase<CustomerDTO>
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly ICustomerAddressRepository _customerAddressRepository;
@@ -22,21 +23,28 @@ namespace FalzoniNetFCSharp.Service.Register
             _unitOfWork = unitOfWork;
         }
 
-        public CustomerDTO Get(Guid Id)
+        public override CustomerDTO Get(Guid Id)
         {
-            var customer = _customerRepository.GetWithInclude(Id);
+            var customer = _customerRepository.Get(Id);
 
             return new CustomerDTO(customer);
         }
 
-        public List<CustomerDTO> GetAll()
+        public override IEnumerable<CustomerDTO> GetAll()
         {
             var customers = _customerRepository.GetAll();
 
             return customers.ToList().ConvertAll(c => new CustomerDTO(c));
         }
 
-        public void Add(CustomerDTO customerDTO)
+        public CustomerDTO GetWithInclude(Guid Id)
+        {
+            var customer = _customerRepository.GetWithInclude(Id);
+
+            return new CustomerDTO(customer);
+        }
+
+        public override void Add(CustomerDTO customerDTO)
         {
             using (var transaction = _unitOfWork.BeginTransaction())
             {
@@ -58,7 +66,7 @@ namespace FalzoniNetFCSharp.Service.Register
             }
         }
 
-        public void Update(CustomerDTO customerDTO)
+        public override void Update(CustomerDTO customerDTO)
         {
             using (var transaction = _unitOfWork.BeginTransaction())
             {
@@ -103,13 +111,13 @@ namespace FalzoniNetFCSharp.Service.Register
             }
         }
 
-        public void Delete(CustomerDTO customerDTO)
+        public override void Delete(Guid Id)
         {
             using (var transaction = _unitOfWork.BeginTransaction())
             {
                 try
                 {
-                    _customerRepository.Delete(customerDTO.Id);
+                    _customerRepository.Delete(Id);
 
                     transaction.Commit();
                 }
@@ -121,7 +129,6 @@ namespace FalzoniNetFCSharp.Service.Register
             }
         }
 
-
         #region private Methods
         private void RemoveAddresses(CustomerDTO customerDTO)
         {
@@ -132,7 +139,6 @@ namespace FalzoniNetFCSharp.Service.Register
                 _customerAddressRepository.RemoveRange(ids);
             }
         }
-
         #endregion
 
     }

@@ -1,13 +1,14 @@
 ﻿using FalzoniNetFCSharp.Domain.DTO.Stock;
 using FalzoniNetFCSharp.Domain.Interfaces.Base;
 using FalzoniNetFCSharp.Domain.Interfaces.Stock;
+using FalzoniNetFCSharp.Service.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace FalzoniNetFCSharp.Service.Stock
 {
-    public class ProductService
+    public class ProductService : ServiceBase<ProductDTO>
     {
         private readonly IProductRepository _productRepository;
         //private readonly IProductCategoryRepository _productCategoryRepository;
@@ -22,21 +23,21 @@ namespace FalzoniNetFCSharp.Service.Stock
             _unitOfWork = unitOfWork;
         }
 
-        public ProductDTO Get(Guid Id)
+        public override ProductDTO Get(Guid Id)
         {
             var product = _productRepository.Get(Id);
 
             return new ProductDTO(product);
         }
 
-        public List<ProductDTO> GetAll()
+        public override IEnumerable<ProductDTO> GetAll()
         {
             var products = _productRepository.GetAll();
 
             return products.ToList().ConvertAll(c => new ProductDTO(c));
         }
 
-        public void Add(ProductDTO productDTO)
+        public override void Add(ProductDTO productDTO)
         {
             using (var transaction = _unitOfWork.BeginTransaction())
             {
@@ -58,7 +59,7 @@ namespace FalzoniNetFCSharp.Service.Stock
             }
         }
 
-        public void Update(ProductDTO productDTO)
+        public override void Update(ProductDTO productDTO)
         {
             using (var transaction = _unitOfWork.BeginTransaction())
             {
@@ -86,13 +87,13 @@ namespace FalzoniNetFCSharp.Service.Stock
             }
         }
 
-        public void Delete(ProductDTO productDTO)
+        public override void Delete(Guid Id)
         {
             using (var transaction = _unitOfWork.BeginTransaction())
             {
                 try
                 {
-                    _productRepository.Delete(productDTO.Id);
+                    _productRepository.Delete(Id);
 
                     transaction.Commit();
                 }

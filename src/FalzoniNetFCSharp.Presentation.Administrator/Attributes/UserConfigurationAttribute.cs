@@ -15,7 +15,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Attributes
             if (HttpContext.Current.GetOwinContext().Authentication.User.Identity.IsAuthenticated)
             {
                 if (filterContext.Controller.ViewBag.Perfis == null)
-                    filterContext.Controller.ViewBag.Perfis = Task.Run(async () => await roleClient.GetAllAsync(UrlConfigurationHelper.RoleGetAll)).Result;
+                    filterContext.Controller.ViewBag.Perfis = Task.Run(async () => await roleClient.GetAllAsync()).Result;
             }
 
             base.OnActionExecuting(filterContext);

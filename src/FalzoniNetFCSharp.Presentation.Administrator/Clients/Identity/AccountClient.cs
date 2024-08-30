@@ -168,7 +168,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
         #region EXTERNAL LOGIN
         public async Task ExternalLogin(string provider)
         {
-            var url = $"{PathUtils.GetApiPath()}/Account/ExternalLogin?provider ={provider}";
+            var url = $"{PathUtils.GetApiPath()}/Account/ExternalLogin?provider={provider}";
 
             using (HttpClient client = new HttpClient())
             {

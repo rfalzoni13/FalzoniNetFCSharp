@@ -1,20 +1,19 @@
-﻿using Unity;
-using FalzoniNetFCSharp.Application.ServiceApplication.Configuration;
+﻿using FalzoniNetFCSharp.Application.ServiceApplication.Configuration;
 using FalzoniNetFCSharp.Application.ServiceApplication.Identity;
 using FalzoniNetFCSharp.Domain.Interfaces.Base;
+using FalzoniNetFCSharp.Domain.Interfaces.Register;
+using FalzoniNetFCSharp.Domain.Interfaces.Stock;
 using FalzoniNetFCSharp.Infra.Data.Context.MySql;
 using FalzoniNetFCSharp.Infra.Data.Context.SqlServer;
 using FalzoniNetFCSharp.Infra.Data.Repositories.Base;
 using FalzoniNetFCSharp.Infra.Data.Repositories.Register;
-using FalzoniNetFCSharp.Application.ServiceApplication.Register;
-using FalzoniNetFCSharp.Domain.Interfaces.Register;
-using FalzoniNetFCSharp.Service.Register;
-using FalzoniNetFCSharp.Utils.Helpers;
-using FalzoniNetFCSharp.Domain.Interfaces.Stock;
 using FalzoniNetFCSharp.Infra.Data.Repositories.Stock;
+using FalzoniNetFCSharp.Service.Base;
+using FalzoniNetFCSharp.Service.Register;
 using FalzoniNetFCSharp.Service.Stock;
-using FalzoniNetFCSharp.Application.ServiceApplication.Stock;
+using FalzoniNetFCSharp.Utils.Helpers;
 using System.Data.Entity;
+using Unity;
 
 
 namespace FalzoniNetFCSharp.Infra.IoC
@@ -35,6 +34,8 @@ namespace FalzoniNetFCSharp.Infra.IoC
             #endregion
 
             #region Services
+            container.RegisterType(typeof(ServiceBase<>));
+
             container.RegisterType<CustomerService>();
             container.RegisterType<ProductService>();
             #endregion
@@ -44,9 +45,6 @@ namespace FalzoniNetFCSharp.Infra.IoC
             container.RegisterType<AccountServiceApplication>();
             container.RegisterType<IdentityUtilityServiceApplication>();
             container.RegisterType<UserServiceApplication>();
-
-            container.RegisterType<CustomerServiceApplication>();
-            container.RegisterType<ProductServiceApplication>();
             #endregion
 
             //Complements

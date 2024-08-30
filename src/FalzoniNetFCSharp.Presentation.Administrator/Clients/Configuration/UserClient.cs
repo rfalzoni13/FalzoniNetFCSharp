@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Configuration
@@ -18,7 +19,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Configuration
     {
         public UserClient() :base() 
         {
-            url += "User";
+            url += "/User";
         }
 
         public override async Task<UserModel> GetAsync(string id)
@@ -27,26 +28,14 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Configuration
             {
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
-                HttpResponseMessage response = await client.GetAsync($"{url}/GetAsync?id={id}");
-                if (response.IsSuccessStatusCode)
-                {
-                    var model = await response.Content.ReadAsAsync<UserModel>();
-                    
-                    //Carregar foto do perfil
-                    model.LoadProfilePhoto();
-
-                    return model;
-                }
-                else
-                {
-                    StatusCodeModel statusCode = await response.Content.ReadAsAsync<StatusCodeModel>();
-
-                    throw new ApplicationException(statusCode.Message);
-                }
+                HttpResponseMessage response = await client.GetAsync($"{url}/Get/{id}");
+                UserModel model = await ResponseUtils<UserModel>.ReturnObjectAsync(response);
+                model.LoadProfilePhoto();
+                return model;
             }
         }
 
-        public async Task<UserTableModel> GetTableAsync(string url)
+        public async Task<UserTableModel> GetTableAsync()
         {
             var table = new UserTableModel();
 
@@ -56,34 +45,25 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Configuration
                 {
                     client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
-                    HttpResponseMessage response = await client.GetAsync(url);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var users = await response.Content.ReadAsAsync<ICollection<UserModel>>();
+                    HttpResponseMessage response = await client.GetAsync($"{url}/GetAll");
+                    ICollection<UserModel> users = await ResponseUtils<ICollection<UserModel>>.ReturnObjectAsync(response);
 
-                        foreach (var user in users)
+                    foreach (var user in users)
+                    {
+                        table.data.Add(new UserListTableModel()
                         {
-                            table.data.Add(new UserListTableModel()
-                            {
-                                Id = user.Id,
-                                Name = user.Name,
-                                Email = user.Email,
-                                UserName = user.UserName,
-                                Gender = user.Gender,
-                                Created = user.Created,
-                                Modified = user.Modified
-                            });
-                        }
-
-                        table.recordsFiltered = table.data.Count();
-                        table.recordsTotal = table.data.Count();
+                            Id = user.Id,
+                            Name = user.Name,
+                            Email = user.Email,
+                            UserName = user.UserName,
+                            Gender = user.Gender,
+                            Created = user.Created,
+                            Modified = user.Modified
+                        });
                     }
-                    else
-                    {
-                        StatusCodeModel statusCode = response.Content.ReadAsAsync<StatusCodeModel>().Result;
 
-                        table.error = statusCode.Message;
-                    }
+                    table.recordsFiltered = table.data.Count();
+                    table.recordsTotal = table.data.Count();
                 }
             }
             catch (Exception ex)

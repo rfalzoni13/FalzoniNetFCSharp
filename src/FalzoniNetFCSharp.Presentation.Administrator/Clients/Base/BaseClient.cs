@@ -112,7 +112,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Base
             {
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
-                HttpResponseMessage response = client.GetAsync($"{url}/Get?id={id}").Result;
+                HttpResponseMessage response = client.GetAsync($"{url}/Get/{id}").Result;
                 T obj = ResponseUtils<T>.ReturnObject(response);
                 return obj;
             }
@@ -124,7 +124,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Base
             {
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
-                HttpResponseMessage response = await client.GetAsync($"{url}/GetAsync?id={id}");
+                HttpResponseMessage response = await client.GetAsync($"{url}/Get/{id}");
                 T obj = await ResponseUtils<T>.ReturnObjectAsync(response);
                 return obj;
             }
@@ -149,7 +149,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Base
             {
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
-                HttpResponseMessage response = await client.GetAsync($"{url}/GetAllAsync");
+                HttpResponseMessage response = await client.GetAsync($"{url}/GetAll");
                 ICollection<T> collection = await ResponseUtils<ICollection<T>>.ReturnObjectAsync(response);
                 return collection;
             }

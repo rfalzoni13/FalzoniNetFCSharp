@@ -17,10 +17,10 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Stock
         public ProductClient()
             :base()
         {
-            url += "Product";
+            url += "/Product";
         }
 
-        public async Task<ProductTableModel> GetTableAsync(string url)
+        public async Task<ProductTableModel> GetTableAsync()
         {
             var table = new ProductTableModel();
 
@@ -30,7 +30,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Stock
                 {
                     client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
-                    HttpResponseMessage response = await client.GetAsync(url);
+                    HttpResponseMessage response = await client.GetAsync($"{url}/GetAll");
 
                     if (response.IsSuccessStatusCode)
                     {

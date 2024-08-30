@@ -2,7 +2,6 @@
 using FalzoniNetFCSharp.Presentation.Administrator.Controllers.Base;
 using FalzoniNetFCSharp.Presentation.Administrator.Models.Register;
 using FalzoniNetFCSharp.Presentation.Administrator.Models.Tables.Register;
-using FalzoniNetFCSharp.Utils.Helpers;
 using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -28,7 +27,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Areas.Register.Controller
 
             try
             {
-                table = await _customerClient.GetTableAsync(UrlConfigurationHelper.CustomerGetAll);
+                table = await _customerClient.GetTableAsync();
             }
             catch (Exception ex)
             {

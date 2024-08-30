@@ -12,7 +12,6 @@ using System.Web.Http;
 namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Configuration
 {
     [CustomAuthorize(Roles = "Administrator")]
-    [RoutePrefix("Api/User")]
     public class UserController : ApiController
     {
         #region Attributes
@@ -37,7 +36,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Configuration
         /// <returns></returns>
         // GET Api/User/GetAll
         [HttpGet]
-        [Route("GetAll")]
         public HttpResponseMessage GetAll()
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -59,35 +57,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Configuration
         }
 
         /// <summary>
-        /// Listar usuários para tabela
-        /// </summary>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="500">Internal Server Error</response>
-        /// <remarks>Listagem de dados dos usuários para geração de tabela</remarks>
-        /// <returns></returns>
-        // GET Api/User/GetDataTable
-        [HttpGet]
-        [Route("GetDataTable")]
-        public HttpResponseMessage GetDataTable()
-        {
-            string action = this.ActionContext.ActionDescriptor.ActionName;
-            try
-            {
-                _logger.Info(action + " - Iniciado");
-                var retorno = _userServiceApplication.GetAll();
-
-                _logger.Info(action + " - Sucesso!");
-
-                _logger.Info(action + " - Finalizado");
-                return Request.CreateResponse(HttpStatusCode.OK, retorno);
-            }
-            catch (Exception ex)
-            {
-                return ResponseManager.ReturnExceptionInternalServerError(ex, Request, _logger, action);
-            }
-        }
-
-        /// <summary>
         /// Listar usuário pelo Id
         /// </summary>
         /// <response code="400">Bad Request</response>
@@ -96,9 +65,8 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Configuration
         /// <remarks>Retorna o usuário através do Id do mesmo</remarks>
         /// <param name="Id">Id do usuário</param>
         /// <returns></returns>
-        // GET Api/User/Get?id={Id}
+        // GET Api/User/Get/{Id}
         [HttpGet]
-        [Route("Get")]
         public HttpResponseMessage Get(Guid Id)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -141,7 +109,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Configuration
         /// <returns></returns>
         // POST Api/User/Add
         [HttpPost]
-        [Route("Add")]
         public HttpResponseMessage Add([FromBody] ApplicationUserRegisterModel applicationUserRegisterModel)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -189,7 +156,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Configuration
         /// <returns></returns>
         // POST: Api/User/AddAsync
         [HttpPost]
-        [Route("AddAsync")]
         public async Task<HttpResponseMessage> AddAsync([FromBody] ApplicationUserRegisterModel applicationUserRegisterModel)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -239,7 +205,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Configuration
         /// <returns></returns>
         // PUT Api/User/Update
         [HttpPut]
-        [Route("Update")]
         public HttpResponseMessage Update([FromBody] ApplicationUserRegisterModel applicationUserRegisterModel)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -285,7 +250,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Configuration
         /// <param name="applicationUserRegisterModel">Objeto de registro do usuário</param>
         // PUT: Api/User/UpdateAsync
         [HttpPut]
-        [Route("UpdateAsync")]
         public async Task<HttpResponseMessage> UpdateAsync([FromBody] ApplicationUserRegisterModel applicationUserRegisterModel)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -334,7 +298,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Configuration
         /// <returns></returns>
         // DELETE Api/User/Delete
         [HttpDelete]
-        [Route("Delete")]
         public HttpResponseMessage Delete([FromBody] ApplicationUserRegisterModel applicationUserRegisterModel)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -382,7 +345,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Configuration
         /// <returns></returns>
         //DELETE: Api/User/DeleteAsync
         [HttpDelete]
-        [Route("DeleteAsync")]
         public async Task<HttpResponseMessage> DeleteAsync([FromBody] ApplicationUserRegisterModel applicationUserRegisterModel)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;

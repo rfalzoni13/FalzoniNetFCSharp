@@ -200,6 +200,8 @@
     <Content Include="Scripts\core\routes.js" />
     <Content Include="Scripts\register\customer\form.js" />
     <Content Include="Scripts\register\customer\main.js" />
+    <Content Include="Scripts\stock\product\form.js" />
+    <Content Include="Scripts\stock\product\main.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

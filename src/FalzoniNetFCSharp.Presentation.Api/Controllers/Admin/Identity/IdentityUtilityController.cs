@@ -12,7 +12,6 @@ using System.Web.Http;
 
 namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
 {
-    [RoutePrefix("Api/IdentityUtility")]
     public class IdentityUtilityController : ApiController
     {
         #region Attributes
@@ -38,7 +37,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
         /// <returns></returns>
         // GET: /IdentityUtitlity/GetTwoFactorProviders
         [HttpGet]
-        [Route("GetTwoFactorProviders")]
         public async Task<HttpResponseMessage> GetTwoFactorProviders(string email, string returnUrl = null)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -65,7 +63,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
         // POST: /IdentityUtitlity/SendTwoFactorProviderCode
         [CustomAuthorize]
         [HttpPost]
-        [Route("SendTwoFactorProviderCode")]
         public async Task<HttpResponseMessage> SendTwoFactorProviderCode(SendCodeModel sendCodeModel)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -101,7 +98,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
         // POST: /IdentityUtitlity/VerifyCodeTwoFactor
         [CustomAuthorize]
         [HttpPost]
-        [Route("VerifyCodeTwoFactor")]
         public async Task<HttpResponseMessage> VerifyCodeTwoFactor(VerifyCodeModel verifiyCodeModel)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -144,7 +140,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
         /// <returns></returns>
         // POST: /IdentityUtitlity/SendEmailConfirmationCode
         [HttpPost]
-        [Route("SendEmailConfirmationCode")]
         public async Task<HttpResponseMessage> SendEmailConfirmationCode(GenerateTokenEmailModel generateTokenEmailModel)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -179,7 +174,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
         /// <returns></returns>
         // POST: /IdentityUtitlity/SendPhoneConfirmationCode
         [HttpPost]
-        [Route("SendPhoneConfirmationCode")]
         public async Task<HttpResponseMessage> SendPhoneConfirmationCode(GenerateTokenPhoneModel generateTokenPhoneModel)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -215,7 +209,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
         /// <returns></returns>
         // POST: /IdentityUtitlity/VerifyEmailConfirmationCode
         [HttpPost]
-        [Route("VerifyEmailConfirmationCode")]
         public async Task<HttpResponseMessage> VerifyEmailConfirmationCode(ConfirmEmailCodeModel confirmEmailCodeModel)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -255,7 +248,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
         /// <returns></returns>
         // POST: /IdentityUtitlity/VerifyPhoneConfirmationCode
         [HttpPost]
-        [Route("VerifyPhoneConfirmationCode")]
         public async Task<HttpResponseMessage> VerifyPhoneConfirmationCode(ConfirmPhoneCodeModel confirmPhoneCodeModel)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
