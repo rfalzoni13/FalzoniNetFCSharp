@@ -28,7 +28,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Base
         #region Getters
         // GET Api/GetAll
         [HttpGet]
-        [Route("GetAll")]
         public virtual HttpResponseMessage GetAll()
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -51,7 +50,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Base
 
         // GET Api/Get/{Id}
         [HttpGet]
-        [Route("Get")]
         public virtual HttpResponseMessage Get(Guid Id)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -85,7 +83,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Base
         #region Add
         // POST Api/Add
         [HttpPost]
-        [Route("Add")]
         public virtual HttpResponseMessage Add([FromBody] TDTO dto)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -122,7 +119,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Base
 
         // POST: Api/AddAsync
         //[HttpPost]
-        //[Route("AddAsync")]
         //public virtual async Task<HttpResponseMessage> AddAsync([FromBody] TDTO dto)
         //{
         //    string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -161,7 +157,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Base
         #region Update
         // PUT Api/Update
         [HttpPut]
-        [Route("Update")]
         public virtual HttpResponseMessage Update([FromBody] TDTO dto)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -197,7 +192,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Base
         }
         // PUT: Api/UpdateAsync
         //[HttpPut]
-        //[Route("UpdateAsync")]
         //public virtual async Task<HttpResponseMessage> UpdateAsync([FromBody] TDTO dto)
         //{
         //    string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -236,7 +230,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Base
         #region Delete 
         // DELETE Api/Delete
         [HttpDelete]
-        [Route("Delete")]
         public virtual HttpResponseMessage Delete([FromUri] Guid Id)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
@@ -272,7 +265,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Base
 
         //// DELETE: Api/DeleteAsync
         //[HttpDelete]
-        //[Route("DeleteAsync")]
         //public virtual async Task<HttpResponseMessage> DeleteAsync([FromUri] Guid Id)
         //{
         //    string action = this.ActionContext.ActionDescriptor.ActionName;
