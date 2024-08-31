@@ -179,14 +179,14 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
             }
         }
 
-        public void Delete(ApplicationUserRegisterDTO register)
+        public void Delete(string Id)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 try
                 {
                     // Get user and rollback if not exists
-                    var user = UserManager.FindById(register.ID);
+                    var user = UserManager.FindById(Id);
 
                     if (user == null)
                     {
@@ -375,14 +375,14 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
             }
         }
 
-        public async Task DeleteAsync(ApplicationUserRegisterDTO register)
+        public async Task DeleteAsync(string Id)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 try
                 {
                     // Get user and rollback if not exists
-                    var user = await UserManager.FindByIdAsync(register.ID);
+                    var user = await UserManager.FindByIdAsync(Id);
 
                     if (user == null)
                     {

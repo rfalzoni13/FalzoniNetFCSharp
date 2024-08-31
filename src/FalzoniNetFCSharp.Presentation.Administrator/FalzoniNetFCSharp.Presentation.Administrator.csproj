@@ -322,7 +322,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Stock\Data\" />
     <Folder Include="Areas\Stock\Views\Product\" />
     <Folder Include="Areas\Stock\Views\Shared\" />
     <Folder Include="Views\Basetroller\" />

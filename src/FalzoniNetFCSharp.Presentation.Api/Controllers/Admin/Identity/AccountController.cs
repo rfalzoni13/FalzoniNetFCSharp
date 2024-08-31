@@ -38,6 +38,7 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Identity
         /// <remarks>Deslogar do Sistema</remarks>
         /// <returns></returns>
         // POST: /Account/Logout
+        [HttpPost]
         public HttpResponseMessage Logout()
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;

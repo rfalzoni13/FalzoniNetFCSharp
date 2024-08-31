@@ -1,6 +1,5 @@
 ﻿using FalzoniNetFCSharp.Presentation.Api.Utils;
 using FalzoniNetFCSharp.Service.Base;
-using FalzoniNetFCSharp.Service.Stock;
 using NLog;
 using System;
 using System.Net;

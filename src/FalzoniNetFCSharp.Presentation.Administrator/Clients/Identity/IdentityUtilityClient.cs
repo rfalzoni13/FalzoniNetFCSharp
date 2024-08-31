@@ -1,12 +1,11 @@
-﻿using FalzoniNetFCSharp.Presentation.Administrator.Models.Identity;
-using FalzoniNetFCSharp.Utils.Helpers;
+﻿using FalzoniNetFCSharp.Presentation.Administrator.Models.Common;
+using FalzoniNetFCSharp.Presentation.Administrator.Models.Identity;
+using FalzoniNetFCSharp.Presentation.Administrator.Utils;
+using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System;
-using FalzoniNetFCSharp.Presentation.Administrator.Models.Common;
-using System.Net;
-using FalzoniNetFCSharp.Presentation.Administrator.Utils;
 
 namespace FalzoniNetFCSharp.Presentation.Administrator.Clients.Identity
 {

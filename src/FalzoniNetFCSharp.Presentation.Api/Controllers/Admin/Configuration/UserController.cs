@@ -294,11 +294,11 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Configuration
         /// <response code="401">Unauthorized</response>
         /// <response code="500">Internal Server Error</response>
         /// <remarks>Exclui o usuario passando o objeto no body da requisição pelo método DELETE</remarks>
-        /// <param name="applicationUserRegisterModel">Objeto de registro do usuario</param>
+        /// <param name="Id">Id do usuário</param>
         /// <returns></returns>
         // DELETE Api/User/Delete
         [HttpDelete]
-        public HttpResponseMessage Delete([FromBody] ApplicationUserRegisterModel applicationUserRegisterModel)
+        public HttpResponseMessage Delete([FromUri] string Id)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
             _logger.Info(action + " - Iniciado");
@@ -306,9 +306,7 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Configuration
             {
                 if (ModelState.IsValid)
                 {
-                    var userDto = applicationUserRegisterModel.ConvertToDTO();
-
-                    _userServiceApplication.Delete(userDto);
+                    _userServiceApplication.Delete(Id);
 
                     _logger.Info(action + " - Sucesso!");
 
@@ -341,19 +339,17 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Configuration
         /// <response code="401">Unauthorized</response>
         /// <response code="500">Internal Server Error</response>
         /// <remarks>Exclui o usuario passando o objeto no body da requisição pelo método DELETE de forma assíncrona</remarks>
-        /// <param name="applicationUserRegisterModel">Objeto de registro do usuario</param>
+        /// <param name="Id">Id do usuário</param>
         /// <returns></returns>
         //DELETE: Api/User/DeleteAsync
         [HttpDelete]
-        public async Task<HttpResponseMessage> DeleteAsync([FromBody] ApplicationUserRegisterModel applicationUserRegisterModel)
+        public async Task<HttpResponseMessage> DeleteAsync([FromUri] string Id)
         {
             string action = this.ActionContext.ActionDescriptor.ActionName;
             _logger.Info(action + " - Iniciado");
             try
             {
-                var userDto = applicationUserRegisterModel.ConvertToDTO();
-
-                await _userServiceApplication.DeleteAsync(userDto);
+                await _userServiceApplication.DeleteAsync(Id);
 
                 _logger.Info(action + " - Sucesso!");
 
