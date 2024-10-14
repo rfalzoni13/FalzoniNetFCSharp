@@ -93,6 +93,7 @@
     <Compile Include="IdentityConfiguration\ApplicationSignInManager.cs" />
     <Compile Include="IdentityConfiguration\ApplicationUserManager.cs" />
     <Compile Include="IdentityConfiguration\ExternalLoginData.cs" />
+    <Compile Include="IdentityConfiguration\IdentityOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceApplication\Configuration\RoleServiceApplication.cs" />
     <Compile Include="ServiceApplication\Configuration\UserServiceApplication.cs" />

@@ -1,8 +1,5 @@
 ﻿using FalzoniNetFCSharp.Domain.Interfaces.Repositories.Base;
 using FalzoniNetFCSharp.Infra.Data.Context;
-using FalzoniNetFCSharp.Infra.Data.Context.MySql;
-using FalzoniNetFCSharp.Infra.Data.Context.SqlServer;
-using FalzoniNetFCSharp.Utils.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -16,19 +13,7 @@ namespace FalzoniNetFCSharp.Infra.Data.Repositories.Base
 
         public BaseRepository()
         {
-            switch (ConfigurationHelper.ProviderName)
-            {
-                case "SqlServer":
-                    context = new FalzoniSqlServerContext();
-                    break;
-
-                case "MySql":
-                    context = new FalzoniMySqlContext();
-                    break;
-
-                default:
-                    throw new System.Exception("Erro ao definir provider");
-            }
+            context = FalzoniContext.Create();
         }
 
 

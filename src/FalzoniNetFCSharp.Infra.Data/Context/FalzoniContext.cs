@@ -1,11 +1,13 @@
 ﻿using FalzoniNetFCSharp.Domain.Entities.Register;
 using FalzoniNetFCSharp.Domain.Entities.Stock;
 using FalzoniNetFCSharp.Infra.Data.Context.MySql;
+using FalzoniNetFCSharp.Infra.Data.Context.PostgreSql;
 using FalzoniNetFCSharp.Infra.Data.Context.SqlServer;
 using FalzoniNetFCSharp.Infra.Data.Identity;
 using FalzoniNetFCSharp.Utils.Helpers;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
+using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration;
 using System.Data.Entity.ModelConfiguration.Conventions;
@@ -29,7 +31,6 @@ namespace FalzoniNetFCSharp.Infra.Data.Context
             Configuration.LazyLoadingEnabled = false;
             Configuration.ProxyCreationEnabled = false;
         }
-
         public static FalzoniContext Create()
         {
             switch (ConfigurationHelper.ProviderName)
@@ -39,6 +40,9 @@ namespace FalzoniNetFCSharp.Infra.Data.Context
 
                 case "MySql":
                     return new FalzoniMySqlContext();
+
+                case "PostgreSql":
+                    return new FalzoniPostgreSqlContext();
 
                 default:
                     throw new System.Exception("Erro ao definir provider");

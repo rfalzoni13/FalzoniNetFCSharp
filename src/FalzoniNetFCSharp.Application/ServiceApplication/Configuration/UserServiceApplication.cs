@@ -2,16 +2,16 @@
 using FalzoniNetFCSharp.Domain.DTO.Identity;
 using FalzoniNetFCSharp.Infra.Data.Identity;
 using FalzoniNetFCSharp.Utils.Helpers;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using System;
-using Microsoft.AspNet.Identity.Owin;
-using System.Linq;
-using Microsoft.AspNet.Identity;
-using System.Transactions;
 
 namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
 {
@@ -21,6 +21,7 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private ApplicationRoleManager _roleManager;
+        private IdentityOfWork _identityOfWork;
 
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
@@ -58,6 +59,13 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
             {
                 _signInManager = value;
             }
+        }
+        #endregion
+
+        #region Constructor
+        public UserServiceApplication(IdentityOfWork identityWork)
+        {
+            _identityOfWork = identityWork;
         }
         #endregion
 
@@ -106,12 +114,12 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
         #region Services
         public void Add(ApplicationUserRegisterDTO register)
         {
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            using (DbContextTransaction transaction = _identityOfWork.BeginTransaction())
             {
                 try
                 {
+                    var user = UserManager.FindByName(register.UserName);
                     // Get user and rollback if exists
-                    var user = UserManager.FindByNameAsync(register.UserName).Result;
 
                     if (user != null)
                     {
@@ -153,7 +161,7 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
 
                     while (i < register.Roles.Count())
                     {
-                        var role = RoleManager.FindByName(register.Roles[i]);
+                        var role = RoleManager.FindById(register.Roles[i]);
                         if (role == null)
                         {
                             throw new ArgumentNullException("Nenhum registro de permissão de acesso encontrado!");
@@ -169,11 +177,11 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
                         i++;
                     }
 
-                    scope.Complete();
+                    transaction.Commit();
                 }
                 catch (Exception ex)
                 {
-                    scope.Dispose();
+                    transaction.Rollback();
                     throw ex;
                 }
             }
@@ -181,7 +189,7 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
 
         public void Delete(string Id)
         {
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            using (var transaction = _identityOfWork.BeginTransaction())
             {
                 try
                 {
@@ -203,11 +211,11 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
                         throw new DbUpdateException("Erro ao excluir usuário!");
                     }
 
-                    scope.Complete();
+                    transaction.Commit();
                 }
                 catch (Exception ex)
                 {
-                    scope.Dispose();
+                    transaction.Rollback();
                     throw ex;
                 }
             }
@@ -215,7 +223,7 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
 
         public void Update(ApplicationUserRegisterDTO register)
         {
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            using (var transaction = _identityOfWork.BeginTransaction())
             {
                 try
                 {
@@ -229,6 +237,7 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
 
                     user.FullName = register.Name;
                     user.Email = register.Email;
+                    user.UserName = register.UserName;
                     user.DateBirth = register.DateBirth;
                     user.PhoneNumber = register.PhoneNumber;
                     user.Modified = DateTime.Now;
@@ -258,26 +267,26 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
 
                     do
                     {
-                        var role = RoleManager.FindByName(register.Roles[i]);
+                        var role = RoleManager.FindById(register.Roles[i]);
                         if (role == null)
                         {
                             throw new ArgumentNullException("Nenhum registro de permissão de acesso encontrado!");
                         }
 
-                        var roles = UserManager.GetRolesAsync(user.Id).Result;
+                        var roles = UserManager.GetRoles(user.Id);
                         if (roles == null || roles.Count() <= 0)
                         {
                             throw new ApplicationException("Erro ao cadastrar novo perfil de acesso!");
                         }
 
-                        result = UserManager.RemoveFromRolesAsync(user.Id, roles.ToArray()).Result;
+                        result = UserManager.RemoveFromRoles(user.Id, roles.ToArray());
 
                         if (!result.Succeeded)
                         {
                             throw new DbUpdateException("Erro ao realizar manutenção de acesso!");
                         }
 
-                        result = UserManager.AddToRoleAsync(user.Id, role.Name).Result;
+                        result = UserManager.AddToRole(user.Id, role.Name);
 
                         if (!result.Succeeded)
                         {
@@ -288,11 +297,11 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
                     }
                     while (i < register.Roles.Count());
 
-                    scope.Complete();
+                    transaction.Commit();
                 }
                 catch (Exception ex)
                 {
-                    scope.Dispose();
+                    transaction.Rollback();
                     throw ex;
                 }
             }
@@ -302,12 +311,12 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
         #region Async Services
         public async Task AddAsync(ApplicationUserRegisterDTO register)
         {
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            using (DbContextTransaction transaction = _identityOfWork.BeginTransaction())
             {
                 try
                 {
                     // Get user and rollback if exists
-                    var user = UserManager.FindByNameAsync(register.UserName).Result;
+                    var user = await UserManager.FindByNameAsync(register.UserName);
 
                     if (user != null)
                     {
@@ -349,7 +358,7 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
 
                     while (i < register.Roles.Count())
                     {
-                        var role = await RoleManager.FindByNameAsync(register.Roles[i]);
+                        var role = await RoleManager.FindByIdAsync(register.Roles[i]);
                         if (role == null)
                         {
                             throw new ArgumentNullException("Nenhum registro de permissão de acesso encontrado!");
@@ -365,11 +374,11 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
                         i++;
                     }
 
-                    scope.Complete();
+                    transaction.Commit();
                 }
                 catch (Exception ex)
                 {
-                    scope.Dispose();
+                    transaction.Rollback();
                     throw ex;
                 }
             }
@@ -377,7 +386,7 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
 
         public async Task DeleteAsync(string Id)
         {
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            using (DbContextTransaction transaction = _identityOfWork.BeginTransaction())
             {
                 try
                 {
@@ -399,11 +408,11 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
                         throw new DbUpdateException("Erro ao excluir usuário!");
                     }
 
-                    scope.Complete();
+                    transaction.Commit();
                 }
                 catch (Exception ex)
                 {
-                    scope.Dispose();
+                    transaction.Rollback();
                     throw ex;
                 }
             }
@@ -411,7 +420,7 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
 
         public async Task UpdateAsync(ApplicationUserRegisterDTO register)
         {
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            using (DbContextTransaction transaction = _identityOfWork.BeginTransaction())
             {
                 try
                 {
@@ -425,6 +434,7 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
 
                     user.FullName = register.Name;
                     user.Email = register.Email;
+                    user.UserName = register.UserName;
                     user.DateBirth = register.DateBirth;
                     user.PhoneNumber = register.PhoneNumber;
                     user.Modified = DateTime.Now;
@@ -454,26 +464,26 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
 
                     do
                     {
-                        var role = RoleManager.FindByName(register.Roles[i]);
+                        var role = await RoleManager.FindByIdAsync(register.Roles[i]);
                         if (role == null)
                         {
                             throw new ArgumentNullException("Nenhum registro de permissão de acesso encontrado!");
                         }
 
-                        var roles = UserManager.GetRolesAsync(user.Id).Result;
+                        var roles = await UserManager.GetRolesAsync(user.Id);
                         if (roles == null || roles.Count() <= 0)
                         {
                             throw new ApplicationException("Erro ao cadastrar novo perfil de acesso!");
                         }
 
-                        result = UserManager.RemoveFromRolesAsync(user.Id, roles.ToArray()).Result;
+                        result = await UserManager.RemoveFromRolesAsync(user.Id, roles.ToArray());
 
                         if (!result.Succeeded)
                         {
                             throw new DbUpdateException("Erro ao realizar manutenção de acesso!");
                         }
 
-                        result = UserManager.AddToRoleAsync(user.Id, role.Name).Result;
+                        result = await UserManager.AddToRoleAsync(user.Id, role.Name);
 
                         if (!result.Succeeded)
                         {
@@ -484,11 +494,11 @@ namespace FalzoniNetFCSharp.Application.ServiceApplication.Configuration
                     }
                     while (i < register.Roles.Count());
 
-                    scope.Complete();
+                    transaction.Commit();
                 }
                 catch (Exception ex)
                 {
-                    scope.Dispose();
+                    transaction.Rollback();
                     throw ex;
                 }
             }

@@ -312,7 +312,6 @@ namespace FalzoniNetFCSharp.Presentation.Api.Controllers.Admin.Configuration
 
                     _logger.Info(action + " - Finalizado");
 
-
                     return Request.CreateResponse(HttpStatusCode.OK, "Usuário excluído com sucesso!");
                 }
                 else

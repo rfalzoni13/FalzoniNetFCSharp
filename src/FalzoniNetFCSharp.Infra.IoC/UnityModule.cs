@@ -1,9 +1,11 @@
-﻿using FalzoniNetFCSharp.Application.ServiceApplication.Configuration;
+﻿using FalzoniNetFCSharp.Application.IdentityConfiguration;
+using FalzoniNetFCSharp.Application.ServiceApplication.Configuration;
 using FalzoniNetFCSharp.Application.ServiceApplication.Identity;
 using FalzoniNetFCSharp.Domain.Interfaces.Repositories.Base;
 using FalzoniNetFCSharp.Domain.Interfaces.Repositories.Register;
 using FalzoniNetFCSharp.Domain.Interfaces.Repositories.Stock;
 using FalzoniNetFCSharp.Infra.Data.Context.MySql;
+using FalzoniNetFCSharp.Infra.Data.Context.PostgreSql;
 using FalzoniNetFCSharp.Infra.Data.Context.SqlServer;
 using FalzoniNetFCSharp.Infra.Data.Repositories.Base;
 using FalzoniNetFCSharp.Infra.Data.Repositories.Register;
@@ -20,49 +22,57 @@ namespace FalzoniNetFCSharp.Infra.IoC
 {
     public class UnityModule
     {
+        private static UnityContainer _container = new UnityContainer();
+
         public static UnityContainer LoadModules()
         {
-            var container = new UnityContainer();
-
             #region Repositories
-            container.RegisterType(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            _container.RegisterType(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
-            container.RegisterType<ICustomerRepository, CustomerRepository>();
-            container.RegisterType<ICustomerAddressRepository, CustomerAddressRepository>();
-            container.RegisterType<IProductRepository, ProductRepository>();
-            container.RegisterType<IProductCategoryRepository, ProductCategoryRepository>();
+            _container.RegisterType<ICustomerRepository, CustomerRepository>();
+            _container.RegisterType<ICustomerAddressRepository, CustomerAddressRepository>();
+            _container.RegisterType<IProductRepository, ProductRepository>();
+            _container.RegisterType<IProductCategoryRepository, ProductCategoryRepository>();
             #endregion
 
             #region Services
-            container.RegisterType(typeof(ServiceBase<>));
+            _container.RegisterType(typeof(ServiceBase<>));
 
-            container.RegisterType<CustomerService>();
-            container.RegisterType<ProductService>();
+            _container.RegisterType<CustomerService>();
+            _container.RegisterType<ProductService>();
             #endregion
 
             #region Application
-            container.RegisterType<RoleServiceApplication>();
-            container.RegisterType<AccountServiceApplication>();
-            container.RegisterType<IdentityUtilityServiceApplication>();
-            container.RegisterType<UserServiceApplication>();
+            _container.RegisterType<RoleServiceApplication>();
+            _container.RegisterType<AccountServiceApplication>();
+            _container.RegisterType<IdentityUtilityServiceApplication>();
+            _container.RegisterType<UserServiceApplication>();
             #endregion
 
             //Complements
-            container.RegisterType<IUnitOfWork, UnitOfWork>();
+            _container.RegisterType<IUnitOfWork, UnitOfWork>();
+            _container.RegisterType<IdentityOfWork>();
 
             //Context
-            switch (ConfigurationHelper.ProviderName)
+            RegisterContext(ConfigurationHelper.ProviderName);
+
+            return _container;
+        }
+
+        private static void RegisterContext(string configuration)
+        {
+            switch (configuration)
             {
                 case "SqlServer":
-                    container.RegisterType<DbContext, FalzoniSqlServerContext>();
+                    _container.RegisterType<DbContext, FalzoniSqlServerContext>();
                     break;
-
                 case "MySql":
-                    container.RegisterType<DbContext, FalzoniMySqlContext>();
+                    _container.RegisterType<DbContext, FalzoniMySqlContext>();
+                    break;
+                case "PostgreSql":
+                    _container.RegisterType<DbContext, FalzoniPostgreSqlContext>();
                     break;
             }
-
-            return container;
         }
     }
 }
