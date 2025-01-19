@@ -3,7 +3,7 @@ using System;
 
 namespace FalzoniNetFCSharp.Domain.Interfaces.Repositories.Base
 {
-    public interface IBaseRepository<T> where T : class
+    public interface IBaseRepository<T> : IDisposable where T : class
     {
         void Add(T obj);
 

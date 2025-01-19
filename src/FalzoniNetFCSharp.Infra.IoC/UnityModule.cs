@@ -26,37 +26,58 @@ namespace FalzoniNetFCSharp.Infra.IoC
 
         public static UnityContainer LoadModules()
         {
-            #region Repositories
+            // Repositories
+            RegisterRepositorues();
+
+            // Services
+            RegisterServices();
+
+            // Service Applications
+            RegisterServiceApplications();
+
+            // Complements
+            RegisterComplements();
+
+            //Context
+            RegisterContext(ConfigurationHelper.ProviderName);
+
+            return _container;
+        }
+
+        #region private METHODS
+        private static void RegisterComplements()
+        {
+            //Complements
+            _container.RegisterType<IUnitOfWork, UnitOfWork>();
+            _container.RegisterType<IdentityOfWork>();
+        }
+
+        private static void RegisterServiceApplications()
+        {
+            _container.RegisterType<RoleServiceApplication>();
+            _container.RegisterType<AccountServiceApplication>();
+            _container.RegisterType<IdentityUtilityServiceApplication>();
+            _container.RegisterType<UserServiceApplication>();
+        }
+
+        private static void RegisterServices()
+        {
+            _container.RegisterType(typeof(ServiceBase<>));
+
+            _container.RegisterType<CustomerService>();
+            _container.RegisterType<ProductService>();
+
+        }
+
+        private static void RegisterRepositorues()
+        {
             _container.RegisterType(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
             _container.RegisterType<ICustomerRepository, CustomerRepository>();
             _container.RegisterType<ICustomerAddressRepository, CustomerAddressRepository>();
             _container.RegisterType<IProductRepository, ProductRepository>();
             _container.RegisterType<IProductCategoryRepository, ProductCategoryRepository>();
-            #endregion
 
-            #region Services
-            _container.RegisterType(typeof(ServiceBase<>));
-
-            _container.RegisterType<CustomerService>();
-            _container.RegisterType<ProductService>();
-            #endregion
-
-            #region Application
-            _container.RegisterType<RoleServiceApplication>();
-            _container.RegisterType<AccountServiceApplication>();
-            _container.RegisterType<IdentityUtilityServiceApplication>();
-            _container.RegisterType<UserServiceApplication>();
-            #endregion
-
-            //Complements
-            _container.RegisterType<IUnitOfWork, UnitOfWork>();
-            _container.RegisterType<IdentityOfWork>();
-
-            //Context
-            RegisterContext(ConfigurationHelper.ProviderName);
-
-            return _container;
         }
 
         private static void RegisterContext(string configuration)
@@ -72,7 +93,8 @@ namespace FalzoniNetFCSharp.Infra.IoC
                 case "PostgreSql":
                     _container.RegisterType<DbContext, FalzoniPostgreSqlContext>();
                     break;
-            }
+            }   
         }
+        #endregion
     }
 }

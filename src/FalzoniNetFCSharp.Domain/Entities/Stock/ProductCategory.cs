@@ -1,7 +1,6 @@
 ﻿using FalzoniNetFCSharp.Domain.Entities.Base;
-using FalzoniNetFCSharp.Domain.Entities.Stock;
 
-namespace FalzoniNetFCSharp.Domain.Entities.Register
+namespace FalzoniNetFCSharp.Domain.Entities.Stock
 {
     public class ProductCategory : BaseEntity
     {

@@ -1,7 +1,6 @@
 ﻿using FalzoniNetFCSharp.Presentation.Administrator.Models.Base;
-using FalzoniNetFCSharp.Presentation.Administrator.Models.Stock;
 
-namespace FalzoniNetFCSharp.Presentation.Administrator.Models.Register
+namespace FalzoniNetFCSharp.Presentation.Administrator.Models.Stock
 {
     public class ProductCategoryModel : BaseModel
     {

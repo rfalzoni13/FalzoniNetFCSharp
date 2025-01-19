@@ -16,7 +16,7 @@ using System.Reflection;
 
 namespace FalzoniNetFCSharp.Infra.Data.Context
 {
-    public abstract class FalzoniContext : IdentityDbContext<ApplicationUser>
+    public abstract class FalzoniContext : StoreDbContext
     {
         #region Attributes
         public DbSet<Customer> Customer { get; set; }
@@ -25,12 +25,6 @@ namespace FalzoniNetFCSharp.Infra.Data.Context
         public DbSet<ProductCategory> ProductCategory { get; set; }
         #endregion
 
-        public FalzoniContext()
-            : base("Falzoni", throwIfV1Schema: false)
-        {
-            Configuration.LazyLoadingEnabled = false;
-            Configuration.ProxyCreationEnabled = false;
-        }
         public static FalzoniContext Create()
         {
             switch (ConfigurationHelper.ProviderName)
@@ -68,6 +62,21 @@ namespace FalzoniNetFCSharp.Infra.Data.Context
             //modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
 
             base.OnModelCreating(modelBuilder);
+        }
+    }
+
+    public class StoreDbContext : IdentityDbContext<ApplicationUser>
+    {
+        public StoreDbContext()
+            : base("Falzoni", throwIfV1Schema: false)
+        {
+            Configuration.LazyLoadingEnabled = false;
+            Configuration.ProxyCreationEnabled = false;
+        }
+
+        public virtual void Update(object entity)
+        {
+            Entry(entity).State = EntityState.Modified;
         }
     }
 }

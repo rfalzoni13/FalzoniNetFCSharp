@@ -10,16 +10,23 @@ namespace FalzoniNetFCSharp.Infra.Data.Repositories.Register
 {
     public class CustomerAddressRepository : BaseRepository<CustomerAddress>, ICustomerAddressRepository
     {
+        public CustomerAddressRepository() 
+            :base()
+        {
+        }
+
+        public CustomerAddressRepository(FalzoniContext falzoniContext)
+            :base(falzoniContext)
+        {
+        }
+
         public void RemoveRange(ICollection<Guid> ids)
         {
-            using (var context = FalzoniContext.Create())
+            ICollection<CustomerAddress> enderecos = context.Set<CustomerAddress>().Where(x => !ids.Contains(x.Id)).ToList();
+            if (enderecos.Any())
             {
-                ICollection<CustomerAddress> enderecos = context.CustomerAddress.Where(x => !ids.Contains(x.Id)).ToList();
-                if (enderecos.Any())
-                {
-                    context.CustomerAddress.RemoveRange(enderecos);
-                    context.SaveChanges();
-                }
+                context.Set<CustomerAddress>().RemoveRange(enderecos);
+                context.SaveChanges();
             }
         }
     }

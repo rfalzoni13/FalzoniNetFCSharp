@@ -69,18 +69,18 @@
     <Compile Include="DTO\Identity\VerifyCodeDTO.cs" />
     <Compile Include="DTO\Register\CustomerAddressDTO.cs" />
     <Compile Include="DTO\Register\CustomerDTO.cs" />
-    <Compile Include="DTO\Register\ProductCategoryDTO.cs" />
+    <Compile Include="DTO\Stock\ProductCategoryDTO.cs" />
     <Compile Include="DTO\Stock\ProductDTO.cs" />
     <Compile Include="Entities\Base\BaseEntity.cs" />
     <Compile Include="Entities\Register\Customer.cs" />
     <Compile Include="Entities\Register\CustomerAddress.cs" />
-    <Compile Include="Entities\Register\ProductCategory.cs" />
+    <Compile Include="Entities\Stock\ProductCategory.cs" />
     <Compile Include="Entities\Stock\Product.cs" />
     <Compile Include="Interfaces\Repositories\Base\IBaseRepository.cs" />
     <Compile Include="Interfaces\Repositories\Base\IUnitOfWork.cs" />
     <Compile Include="Interfaces\Repositories\Register\ICustomerAddressRepository.cs" />
     <Compile Include="Interfaces\Repositories\Register\ICustomerRepository.cs" />
-    <Compile Include="Interfaces\Repositories\Register\IProductCategoryRepository.cs" />
+    <Compile Include="Interfaces\Repositories\Stock\IProductCategoryRepository.cs" />
     <Compile Include="Interfaces\Repositories\Stock\IProductRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

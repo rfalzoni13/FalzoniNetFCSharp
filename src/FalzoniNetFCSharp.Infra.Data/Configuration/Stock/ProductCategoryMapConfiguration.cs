@@ -1,7 +1,7 @@
-﻿using FalzoniNetFCSharp.Domain.Entities.Register;
+﻿using FalzoniNetFCSharp.Domain.Entities.Stock;
 using System.Data.Entity.ModelConfiguration;
 
-namespace FalzoniNetFCSharp.Infra.Data.Configuration.Register
+namespace FalzoniNetFCSharp.Infra.Data.Configuration.Stock
 {
     public class ProductCategoryMapConfiguration : EntityTypeConfiguration<ProductCategory>
     {

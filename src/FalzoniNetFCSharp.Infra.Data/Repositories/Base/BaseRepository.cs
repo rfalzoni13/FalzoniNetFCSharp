@@ -2,14 +2,13 @@
 using FalzoniNetFCSharp.Infra.Data.Context;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 
 namespace FalzoniNetFCSharp.Infra.Data.Repositories.Base
 {
-    public abstract class BaseRepository<T> : IDisposable, IBaseRepository<T> where T : class
+    public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
     {
-        protected DbContext context { get; private set; }
+        protected StoreDbContext context { get; private set; }
 
         public BaseRepository()
         {
@@ -23,14 +22,18 @@ namespace FalzoniNetFCSharp.Infra.Data.Repositories.Base
         }
         public virtual void Add(T obj)
         {
+            if (obj == null) return;
+
             context.Set<T>().Add(obj);
             context.SaveChanges();
         }
 
         public virtual void Update(T obj)
         {
+            if (obj == null) return;
+
             context.Set<T>().Attach(obj);
-            context.Entry(obj).State = EntityState.Modified;
+            context.Update(obj);
             context.SaveChanges();
         }
 

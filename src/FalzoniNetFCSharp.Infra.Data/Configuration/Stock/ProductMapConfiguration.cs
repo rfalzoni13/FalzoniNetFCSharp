@@ -9,6 +9,8 @@ namespace FalzoniNetFCSharp.Infra.Data.Configuration.Stock
         {
             HasKey(p => p.Id);
 
+            Property(p => p.CategoryId).IsRequired();
+
             Property(p => p.Name).IsRequired().HasMaxLength(500);
 
             Property(p => p.Code).IsRequired();
@@ -22,7 +24,7 @@ namespace FalzoniNetFCSharp.Infra.Data.Configuration.Stock
             Property(p => p.Modified).IsOptional();
 
 
-            HasRequired(p => p.Category).WithRequiredPrincipal().Map(f => f.MapKey("ProductCategoryId"));
+            HasRequired(p => p.Category).WithRequiredPrincipal().Map(f => f.MapKey("CategoryId"));
         }
     }
 }

@@ -1,12 +1,11 @@
 ﻿using FalzoniNetFCSharp.Domain.Entities.Base;
-using FalzoniNetFCSharp.Domain.Entities.Register;
 using System;
 
 namespace FalzoniNetFCSharp.Domain.Entities.Stock
 {
     public class Product : BaseEntity
     {
-        public Guid ProductCategoryId { get; set; }
+        public Guid CategoryId { get; set; }
 
         public string Name { get; set; }
 

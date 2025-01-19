@@ -1,10 +1,8 @@
 ﻿using FalzoniNetFCSharp.Domain.DTO.Base;
-using FalzoniNetFCSharp.Domain.DTO.Stock;
-using FalzoniNetFCSharp.Domain.Entities.Register;
 using FalzoniNetFCSharp.Domain.Entities.Stock;
 using System;
 
-namespace FalzoniNetFCSharp.Domain.DTO.Register
+namespace FalzoniNetFCSharp.Domain.DTO.Stock
 {
     public class ProductCategoryDTO : BaseDTO
     {
@@ -47,7 +45,7 @@ namespace FalzoniNetFCSharp.Domain.DTO.Register
                 new Product
                 {
                     Id = this.Product.Id,
-                    ProductCategoryId = this.Product.ProductCategoryId,
+                    CategoryId = this.Product.CategoryId,
                     Name = this.Product.Name,
                     Code = this.Product.Code,
                     Description = this.Product.Description,

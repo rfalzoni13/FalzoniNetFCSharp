@@ -1,5 +1,4 @@
 ﻿using FalzoniNetFCSharp.Presentation.Administrator.Models.Base;
-using FalzoniNetFCSharp.Presentation.Administrator.Models.Register;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -8,7 +7,7 @@ namespace FalzoniNetFCSharp.Presentation.Administrator.Models.Stock
     public class ProductModel : BaseModel
     {
         [Required(ErrorMessage = "A categoria do produto é obrigatória")]
-        public Guid ProductCategoryId { get; set; }
+        public Guid CategoryId { get; set; }
 
         [Required(ErrorMessage = "O nome do produto é obrigatório")]
         public string Name { get; set; }
